@@ -1,0 +1,28 @@
+{
+  "skill_name": "ai-video-generation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need a 10-second cinematic shot of a barista making coffee for a landing page hero video. Which model and what prompt?",
+      "expected_output": "Should recommend Veo 3 or Runway Gen-4 for quality/motion control, or Kling for lower cost. Should provide a structured prompt following subject + action + camera + style + mood, e.g. specifying camera movement and cinematic grading. Should warn against expecting readable text or a real brand logo in the shot.",
+      "assertions": [
+        "Recommends a specific model with rationale",
+        "Provides a structured example prompt",
+        "Specifies camera movement and style in the prompt",
+        "Warns about text/logo limitations"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Can I use AI video generation to recreate our actual product's UI in a demo?",
+      "expected_output": "Should say no \u2014 AI models hallucinate UI and won't reproduce it accurately. Should recommend screen-recording the real product instead and using AI generation only for surrounding b-roll/context shots, then compositing in editing.",
+      "assertions": [
+        "Advises against generating real UI with AI",
+        "Recommends screen recording instead",
+        "Suggests compositing AI b-roll with real screen recording"
+      ],
+      "files": []
+    }
+  ]
+}

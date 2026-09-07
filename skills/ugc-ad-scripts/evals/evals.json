@@ -1,0 +1,29 @@
+{
+  "skill_name": "ugc-ad-scripts",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a 30-second UGC ad script for a skincare serum, from the perspective of a customer who was skeptical at first.",
+      "expected_output": "Should follow the UGC structure: hook, problem, discovery/turn, demo/proof, objection handle, CTA. Should use the skeptic-to-believer angle explicitly. Should write in casual, contraction-heavy spoken language, not brand copy. Should include a text-overlay track distinct from the spoken line and a specific, low-friction CTA.",
+      "assertions": [
+        "Follows hook/problem/turn/proof/CTA structure",
+        "Uses skeptic-to-believer angle",
+        "Casual spoken language, not ad copy",
+        "Includes CTA",
+        "Suggests a text overlay track"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "We need this UGC ad performed by an AI avatar instead of a real creator. Does that change anything?",
+      "expected_output": "Should note the script structure stays the same but flag that avatar delivery needs to sound natural/conversational since lip-sync avatars can feel stilted with brand-speak. Should suggest keeping sentences short and avoiding real-creator-only elements like handheld camera imperfections. Should cross-reference that AI avatar generation itself is a separate concern from script writing.",
+      "assertions": [
+        "Confirms core script structure is unchanged",
+        "Flags natural/conversational language for avatar delivery",
+        "Notes handheld/authenticity cues don't apply the same way to avatars"
+      ],
+      "files": []
+    }
+  ]
+}

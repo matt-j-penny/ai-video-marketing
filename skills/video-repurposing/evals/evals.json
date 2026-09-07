@@ -1,0 +1,29 @@
+{
+  "skill_name": "video-repurposing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We recorded a 45-minute podcast episode. How do we turn it into TikTok clips?",
+      "expected_output": "Should walk through the repurposing workflow: get/generate a transcript, identify clip-worthy moments (self-contained ideas, strong opinions, concrete stories, specific numbers, emotional peaks), trim to self-contained units, add a re-hook if needed, add captions, reformat to 9:16.",
+      "assertions": [
+        "References needing a transcript first",
+        "Lists clip-worthy moment criteria",
+        "Mentions re-hooking clips that lack context",
+        "Mentions mandatory captions",
+        "Mentions reformatting aspect ratio"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "One clip from our webinar is confusing out of context even though the moment itself was great. What do we do?",
+      "expected_output": "Should recommend either finding a tighter, more self-contained boundary for the clip, or adding a text-overlay bridge / re-hook at the start to supply the missing context, rather than publishing it as-is.",
+      "assertions": [
+        "Identifies missing self-contained context as the issue",
+        "Suggests re-trimming for a self-contained boundary",
+        "Suggests a text-overlay bridge as an alternative fix"
+      ],
+      "files": []
+    }
+  ]
+}

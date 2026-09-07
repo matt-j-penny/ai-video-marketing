@@ -1,0 +1,29 @@
+{
+  "skill_name": "video-hooks",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a TikTok about a productivity tip but it's getting almost no views past the first second. How do I fix the hook?",
+      "expected_output": "Should diagnose this as a hook problem, not a content problem. Should suggest writing 8-10 hook variants using the hook patterns table (curiosity gap, direct callout, bold claim, etc). Should recommend cutting throat-clearing intros and starting on the payoff. Should mention pairing a verbal hook with a visual pattern-interrupt since most viewers scroll muted.",
+      "assertions": [
+        "Identifies this as a hook-specific problem",
+        "References multiple hook patterns",
+        "Recommends writing several variants before picking one",
+        "Mentions visual + verbal hook pairing"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Write 5 hook options for a video ad about an app that automates invoicing for freelancers.",
+      "expected_output": "Should produce 5 distinct hooks using different patterns (e.g., direct callout to freelancers, bold claim about time saved, question hook, negative hook about manual invoicing, curiosity gap about a result). Each should be under ~3 seconds to say aloud and avoid generic openers.",
+      "assertions": [
+        "Produces 5 distinct hooks",
+        "Uses different hook patterns, not variations of one",
+        "Hooks are short enough to say in ~3 seconds",
+        "Avoids generic phrases like 'you won't believe'"
+      ],
+      "files": []
+    }
+  ]
+}

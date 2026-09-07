@@ -1,0 +1,27 @@
+{
+  "skill_name": "video-ab-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We tested two ads: one has a new hook, the other has a new hook AND a new CTA. Ad B won. Was the hook or the CTA responsible?",
+      "expected_output": "Should point out this test is confounded \u2014 with two variables changed at once in Ad B, you cannot attribute the win to either the hook or the CTA specifically. Should recommend re-running a cleaner test that isolates one variable at a time.",
+      "assertions": [
+        "Identifies the test as confounded (two variables changed)",
+        "Explains why the win can't be attributed to a specific variable",
+        "Recommends a follow-up single-variable test"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Our thumbnail test has only 200 views on each variant after 2 hours and one is ahead by a few clicks. Can we call it?",
+      "expected_output": "Should caution against calling the test this early \u2014 the sample size is small and the lead could be noise. Should recommend a pre-set minimum sample size or time window before deciding, and treating a close early result as inconclusive rather than a real winner.",
+      "assertions": [
+        "Advises against calling the test early",
+        "Flags the small sample size as a reliability concern",
+        "Recommends waiting for a pre-set threshold before deciding"
+      ],
+      "files": []
+    }
+  ]
+}

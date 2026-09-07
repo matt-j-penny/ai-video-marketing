@@ -1,0 +1,12 @@
+{
+  "name": "ai-video-marketing",
+  "description": "AI video marketing skills for AI agents — hooks, UGC ad scripts, AI video generation, YouTube SEO, repurposing, and creative testing",
+  "version": "1.0.0",
+  "author": {
+    "name": "Matt Penny"
+  },
+  "homepage": "https://github.com/matt-j-penny/ai-video-marketing",
+  "repository": "https://github.com/matt-j-penny/ai-video-marketing",
+  "license": "MIT",
+  "skills": "./skills"
+}
