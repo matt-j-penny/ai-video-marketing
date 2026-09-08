@@ -4,14 +4,14 @@
     "name": "Matt Penny"
   },
   "metadata": {
-    "description": "AI video marketing skills for AI agents — hooks, UGC ad scripts, AI video generation, YouTube SEO, repurposing, and creative testing",
+    "description": "AI video editing skills for AI agents — rough-cutting talking-head and narrated footage",
     "version": "1.0.0",
     "repository": "https://github.com/matt-j-penny/ai-video-marketing"
   },
   "plugins": [
     {
       "name": "ai-video-marketing",
-      "description": "10 video marketing skills for technical marketers and founders: hooks, UGC ad scripts, video ad creative, AI video generation (Veo/Sora/Runway/Kling), video repurposing, YouTube SEO, video analytics, storyboarding, video A/B testing, and influencer video briefs",
+      "description": "Video editing skills for technical marketers and founders: rough-cut (silence removal + bad-take removal for talking-head/narrated footage)",
       "source": "./"
     }
   ]

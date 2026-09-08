@@ -1,0 +1,29 @@
+{
+  "skill_name": "rough-cut",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I recorded a talking-head video for our product page but there are long pauses and I stumbled over a couple of lines and re-said them. Can you make a rough cut?",
+      "expected_output": "Should describe the ordered pipeline: detect and cut silence with ffmpeg silencedetect first, extract audio from the silence-removed version, transcribe it with word-level timestamps (Deepgram nova-2 preferred, then ElevenLabs, then local Whisper), find the repeated lines in the transcript and keep only the last clean instance, then refine each cut point against the actual audio (not the raw transcript timestamp) before cutting.",
+      "assertions": [
+        "Cuts silence before transcribing, not after",
+        "Requires word-level timestamps, not a plain transcript",
+        "States the Deepgram > ElevenLabs > Whisper fallback order",
+        "Refines transcript timestamps against the audio before cutting",
+        "Keeps the last clean take of a repeated line, not all of them"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm editing this in DaVinci Resolve which is already open — don't want a separate ffmpeg export, just tell me where to cut.",
+      "expected_output": "Should still run silence detection and transcription/bad-take analysis, but apply the resulting cuts on the existing Resolve timeline instead of producing a new ffmpeg-rendered file, and should refine cut points against the audio before placing them.",
+      "assertions": [
+        "Uses the connected video editor for the actual cuts instead of ffmpeg output",
+        "Still performs silence detection, transcription, and bad-take analysis",
+        "Still refines timestamps against audio before cutting"
+      ],
+      "files": []
+    }
+  ]
+}
