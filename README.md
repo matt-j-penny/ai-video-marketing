@@ -12,6 +12,7 @@ Skills are markdown files that give AI agents specialized knowledge and workflow
 
 | Skill | Description |
 |-------|-------------|
+| [video-editing/transcribe](skills/video-editing/transcribe/) | Transcribe a video or audio file with word-level timestamps (Deepgram nova-2 → ElevenLabs → local Whisper) — the input other workflows like rough-cut build on. |
 | [video-editing/rough-cut](skills/video-editing/rough-cut/) | Turn a raw talking-head or narrated video into a rough cut — strip dead air and remove bad takes (false starts, repeated takes, fluffs) using a word-level-timestamp transcript. |
 | [video-editing/level-audio](skills/video-editing/level-audio/) | Even out a video's narration so no part is noticeably louder or quieter than the rest, using loudness-range measurement and speech-specific dynamics processing. |
 | [video-editing/create-design-md](skills/video-editing/create-design-md/) | Create a DESIGN.md design-system doc — from a live site, existing code, or a guided question set when there's no reference material — so motion graphics, title cards, and on-screen UI stay visually consistent. |
@@ -65,6 +66,9 @@ git submodule add https://github.com/matt-j-penny/ai-video-marketing.git .agents
 Once installed, just ask your agent to help with video editing tasks:
 
 ```
+"Transcribe this interview with word-level timestamps"
+→ Uses video-editing/transcribe skill
+
 "Make a rough cut of this talking-head video, cut the silences and bad takes"
 → Uses video-editing/rough-cut skill
 
@@ -78,6 +82,7 @@ Once installed, just ask your agent to help with video editing tasks:
 You can also invoke a skill directly:
 
 ```
+/transcribe
 /rough-cut
 /level-audio
 /create-design-md

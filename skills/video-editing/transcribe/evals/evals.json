@@ -1,0 +1,28 @@
+{
+  "skill_name": "transcribe",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you transcribe this interview.mp4 for me? I need to find the exact moment someone says a specific line so I can clip it.",
+      "expected_output": "Should extract audio from the video if needed, then transcribe using Deepgram nova-2 with word-level timestamps enabled (words=true), falling back to ElevenLabs then local Whisper only if Deepgram is unavailable. Should return/save the word-level array, not just a flat transcript string, since the stated goal requires locating an exact moment.",
+      "assertions": [
+        "Extracts audio from the video before transcribing (or transcribes directly if already audio)",
+        "Uses Deepgram nova-2 with word-level timestamps as the default, falling back only if unavailable",
+        "Confirms the response includes a per-word start/end array, not just sentence-level timing",
+        "Returns or saves the word-level data rather than only the transcript text"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Deepgram isn't set up for me right now, can you still get a word-level transcript of this podcast.mp3?",
+      "expected_output": "Should fall through to ElevenLabs speech-to-text, and if that's also unavailable, to local Whisper with word timestamps enabled (e.g. --word_timestamps True). Should not silently accept a transcription result that lacks per-word timing at any fallback stage.",
+      "assertions": [
+        "Falls back through ElevenLabs then local Whisper in that order",
+        "Ensures word-level timestamps are enabled at whichever fallback stage is used",
+        "Does not accept a sentence-level-only transcript as a substitute"
+      ],
+      "files": []
+    }
+  ]
+}
