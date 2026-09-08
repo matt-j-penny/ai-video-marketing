@@ -1,0 +1,29 @@
+{
+  "skill_name": "level-audio",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "The voice in this talking-head video goes up and down in volume — some lines are loud, some are really quiet. Can you even that out?",
+      "expected_output": "Should identify this as an internal-loudness-range problem, not an overall-level problem. Should measure LRA with ebur128 first, apply speechnorm to compress loud parts and lift quiet parts, verify the resulting LRA dropped into roughly the 3-5 LU range, then apply a final linear loudnorm gain (using measured values, not another dynamic pass) to land at a safe target level and peak. Should copy the video stream rather than re-encoding it.",
+      "assertions": [
+        "Distinguishes this from a simple overall-loudness normalization",
+        "Measures loudness range (LRA) before and after",
+        "Uses speechnorm (or equivalent dynamics processing) rather than only loudnorm linear mode",
+        "Applies the final gain as a linear/measured pass rather than stacking a second dynamic normalizer",
+        "Uses -c:v copy so the video isn't needlessly re-encoded"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "This whole video's audio is just too quiet compared to my other videos, can you fix the level?",
+      "expected_output": "Should recognize this as an overall-level problem rather than an internal-consistency problem, and reach for a two-pass loudnorm (measure then linear apply) to hit a target integrated loudness, without necessarily needing speechnorm if the loudness range is already reasonable. Should still check LRA to confirm there isn't also an internal-consistency issue worth mentioning.",
+      "assertions": [
+        "Recognizes this as primarily an overall-level issue, not necessarily requiring speechnorm",
+        "Uses a measured/linear loudnorm pass to hit a specific target loudness",
+        "Checks LRA rather than assuming no internal inconsistency exists"
+      ],
+      "files": []
+    }
+  ]
+}

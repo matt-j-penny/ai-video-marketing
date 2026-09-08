@@ -13,6 +13,7 @@ Skills are markdown files that give AI agents specialized knowledge and workflow
 | Skill | Description |
 |-------|-------------|
 | [video-editing/rough-cut](skills/video-editing/rough-cut/) | Turn a raw talking-head or narrated video into a rough cut — strip dead air and remove bad takes (false starts, repeated takes, fluffs) using a word-level-timestamp transcript. |
+| [video-editing/level-audio](skills/video-editing/level-audio/) | Even out a video's narration so no part is noticeably louder or quieter than the rest, using loudness-range measurement and speech-specific dynamics processing. |
 
 ## Installation
 
@@ -65,12 +66,16 @@ Once installed, just ask your agent to help with video editing tasks:
 ```
 "Make a rough cut of this talking-head video, cut the silences and bad takes"
 → Uses video-editing/rough-cut skill
+
+"The voice in this video is loud in some parts and quiet in others, even it out"
+→ Uses video-editing/level-audio skill
 ```
 
-You can also invoke the skill directly:
+You can also invoke a skill directly:
 
 ```
 /rough-cut
+/level-audio
 ```
 
 ## Contributing
