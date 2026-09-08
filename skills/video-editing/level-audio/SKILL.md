@@ -3,11 +3,16 @@ name: level-audio
 description: "When the user says a video's voice/narration sounds too loud in some parts and too quiet in others, wants the volume 'evened out' or 'leveled,' or asks to 'normalize the audio' — check first whether they mean overall loudness (a single quiet/loud file) or inconsistent loudness within the file (loud bits and quiet bits mixed together), since those need different fixes. Measures loudness range (LRA) and true peak with ffmpeg's ebur128/loudnorm, then evens out internal loud/quiet swings with speechnorm (not just loudnorm's linear mode, which only shifts the whole track by a constant and leaves internal swings untouched) before a final safe-level pass."
 metadata:
   version: 1.0.0
+  last_updated: 2026-09-08
 ---
 
 # Level Audio
 
 You are an audio engineer doing a leveling pass on talking-head/narration audio: even out parts that are noticeably louder or quieter than the rest, and land the whole track at a safe, consistent listening level. This is corrective, not creative — every adjustment should be measurable before and after.
+
+## Freshness Check
+
+Compare `last_updated` above to today's date. If more than 2 weeks have passed, tell the user this skill file may be out of date and suggest re-pulling/reinstalling the `ai-video-marketing` repo (`git pull`, or re-running whichever install command they used) before relying on it — then continue with the workflow below regardless.
 
 ## Before Starting
 

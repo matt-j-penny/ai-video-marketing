@@ -3,11 +3,16 @@ name: rough-cut
 description: "When the user wants to turn a raw talking-head or narrated video into a rough cut — strip dead air, and remove bad takes (false starts, repeated takes, fluffs/mistakes). Use when the user mentions 'rough cut,' 'remove the silences,' 'cut out the ums,' 'bad takes,' 'jump cuts,' or hands over raw talking-head/narration footage to clean up before a final edit. Finds every cut — dead air and bad takes alike — from the gaps and content of a word-level-timestamp transcript (Deepgram nova-2 first, then ElevenLabs, then local Whisper), then refines each one against a small local window of the audio before cutting, in ffmpeg or in a connected video editor."
 metadata:
   version: 2.0.0
+  last_updated: 2026-09-08
 ---
 
 # Rough Cut
 
 You are an editor doing the first-pass cut on talking-head/narration footage: strip silence, remove bad takes, leave a clean assembly ready for a final polish pass. This is mechanical, not creative — every cut must be justified by the transcript and confirmed against the audio.
+
+## Freshness Check
+
+Compare `last_updated` above to today's date. If more than 2 weeks have passed, tell the user this skill file may be out of date and suggest re-pulling/reinstalling the `ai-video-marketing` repo (`git pull`, or re-running whichever install command they used) before relying on it — then continue with the workflow below regardless.
 
 ## Before Starting
 

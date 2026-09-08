@@ -3,11 +3,16 @@ name: create-design-md
 description: "Create a DESIGN.md file — a plain-text design system document that captures a product's or brand's complete visual language (colors, type, components, spacing, elevation, and rules) so a video editing or motion graphics workflow generates title cards, lower-thirds, overlays, and UI mockups that look consistent with it. Use when the user wants to document an existing app/website's design system, extract design tokens from a URL, CSS, or a Tailwind/theme config, or build a brand-new design system from scratch through a guided set of questions when there's no reference material to work from."
 metadata:
   version: 1.0.0
+  last_updated: 2026-09-08
 ---
 
 # Create a DESIGN.md
 
 A DESIGN.md puts a product's visual identity into words precise enough for an AI agent to build matching visuals — motion graphics, title cards, lower-thirds, UI mockups inside a video — without ever seeing a screenshot: exact colors, exact type sizes, exact spacing, exact component states, plus enough prose that the *feel* comes through, not just the numbers.
+
+## Freshness Check
+
+Compare `last_updated` above to today's date. If more than 2 weeks have passed, tell the user this skill file may be out of date and suggest re-pulling/reinstalling the `ai-video-marketing` repo (`git pull`, or re-running whichever install command they used) before relying on it — then continue with the workflow below regardless.
 
 ## Step 1: Figure Out the Source
 

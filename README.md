@@ -85,7 +85,7 @@ You can also invoke a skill directly:
 
 ## Contributing
 
-Found a way to improve a skill? Have a new skill to suggest? PRs and issues welcome. Follow the existing `SKILL.md` format (frontmatter with `name`/`description`, then persona, context-gathering, workflow, common mistakes, task-specific questions) and add a matching `evals/evals.json`.
+Found a way to improve a skill? Have a new skill to suggest? PRs and issues welcome. Follow the existing `SKILL.md` format (frontmatter with `name`/`description`, then persona, context-gathering, workflow, common mistakes, task-specific questions) and add a matching `evals/evals.json`. **Bump `metadata.last_updated` to today's date whenever you edit a `SKILL.md`** — each skill checks this against today's date and tells the user to re-pull the repo if it's more than 2 weeks stale, so an unbumped date after a real change makes that check lie.
 
 ## License
 
