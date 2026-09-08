@@ -1,0 +1,29 @@
+{
+  "skill_name": "create-design-md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to build a set of motion graphics title cards for my product but I don't have a brand, a URL, or any existing design to go off. Can you help me put together a design system first?",
+      "expected_output": "Should recognize there's no reference material and run the guided question set (what it is, desired feel, light/dark, anchor color, type character, density, shape language, reference points, where it lives) as one batched set rather than one question at a time, before drafting anything. Should not invent a design system without asking first.",
+      "assertions": [
+        "Identifies there is no reference material to extract from",
+        "Asks the guided question set rather than guessing a design",
+        "Asks the questions together as a batch, not one per turn",
+        "Does not draft DESIGN.md sections before getting answers"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Turn stripe.com's design into a DESIGN.md I can use for the on-screen graphics in my explainer video.",
+      "expected_output": "Should recognize this as extraction from a live site, fetch/read the site's styles rather than guessing, and produce all 9 sections (theme, colors, typography, components, layout/spacing, elevation, do's/don'ts, responsive behavior, agent prompt guide) with concrete values (real hex codes, real pixel sizes) rather than vague descriptions.",
+      "assertions": [
+        "Treats this as extraction from a live source rather than from-scratch design",
+        "Produces all 9 required sections",
+        "Uses concrete hex/pixel values rather than vague adjectives",
+        "Includes an agent prompt guide with runnable example prompts"
+      ],
+      "files": []
+    }
+  ]
+}
