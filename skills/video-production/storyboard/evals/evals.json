@@ -1,0 +1,29 @@
+{
+  "skill_name": "storyboard",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/storyboard Here's my explainer script (script.md). Can you break it into a storyboard I can review?",
+      "expected_output": "Should divide the script into visual beats (not a fixed count), generate an opaque 16:9 storyboard image per graphic beat, write a manifest following the documented schema with stable beat IDs, and build a standalone local HTML preview showing each beat's image, script range/transcript excerpt, visual objective, and review status. Should stop for review rather than building React/Remotion scenes.",
+      "assertions": [
+        "Stays in storyboard mode, does not create Remotion/React scene files",
+        "Generates opaque-background images for graphic beats, not transparent",
+        "Writes a manifest with stable beat IDs matching references/preview-schema.md",
+        "Produces a standalone local HTML preview usable without a dev server"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "$storyboard I approved beats 1-4 in the preview, now build the Remotion scenes for them.",
+      "expected_output": "Should enter scene/build mode only for the approved beats, create HTML/React/TypeScript scenes that reproduce each approved storyboard image, animate with useCurrentFrame()/spring()/interpolate() (not CSS transitions), keep full-background graphics opaque, render a frame and compare it against the approved storyboard image before calling a scene done, and update the implementation preview with links to each scene/source image/rendered frame.",
+      "assertions": [
+        "Only builds the approved beats, not unapproved ones",
+        "Uses useCurrentFrame()/spring()/interpolate() rather than CSS transitions or Tailwind animation classes",
+        "Renders and compares a frame against the approved storyboard image before declaring a scene complete",
+        "Updates the implementation preview with scene/source/render links"
+      ],
+      "files": []
+    }
+  ]
+}
