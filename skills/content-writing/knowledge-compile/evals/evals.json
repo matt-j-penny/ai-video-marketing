@@ -1,0 +1,17 @@
+{
+  "skill_name": "knowledge-compile",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A new competitor research report just landed, compile knowledge.",
+      "expected_output": "Should read knowledge/index.md, list research/ and extract the report's text with the SKILL.md one-liner instead of reading the raw HTML, run the staleness check, update only the affected pages with last_updated and sources frontmatter, confirm every source path exists, and run the retired-offer sweep built from backbone/offer.md's NOT-sold list.",
+      "assertions": [
+        "Never reads a raw research/*.html file",
+        "Updates only the pages affected by the new report",
+        "Every claim has a sources path that exists on disk",
+        "Runs the retired-offer grep sweep before saving"
+      ],
+      "files": []
+    }
+  ]
+}

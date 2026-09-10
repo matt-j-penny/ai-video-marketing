@@ -1,0 +1,18 @@
+{
+  "skill_name": "ig-competitor-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Research @handle_a and @handle_b on Instagram, what's working for them this week?",
+      "expected_output": "Should use the inline handles, fire ONE apify/instagram-post-scraper call with detailedData, waitSecs 0 and the locked input, poll get-actor-run to SUCCEEDED, pull get-dataset-items with no fields filter and jq the spilled file to disk, run rank-and-select.py with --expect and --expect-count, fan out one Sonnet subagent per pick that writes post.json, write a 3-4 sentence pattern.txt, and build the HTML report into research/ with build-report.sh.",
+      "assertions": [
+        "Makes exactly one paid Apify scrape, started with waitSecs 0",
+        "Pulls the dataset with no fields filter and writes it to disk with jq instead of reading it",
+        "Ranks with rank-and-select.py rather than sorting in its head",
+        "Spawns one subagent per pick in parallel",
+        "Delivers research/IG-Competitor-Research_<RUN>.html plus the ranked table and pattern"
+      ],
+      "files": []
+    }
+  ]
+}

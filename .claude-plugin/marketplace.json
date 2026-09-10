@@ -4,14 +4,14 @@
     "name": "Matt Penny"
   },
   "metadata": {
-    "description": "AI video editing skills for AI agents — rough-cutting talking-head and narrated footage",
+    "description": "AI video marketing skills for AI agents — content research, hooks and scripts in your voice, posting, and video editing",
     "version": "1.0.0",
     "repository": "https://github.com/matt-j-penny/ai-video-marketing"
   },
   "plugins": [
     {
       "name": "ai-video-marketing",
-      "description": "Video editing skills for technical marketers and founders: rough-cut (silence removal + bad-take removal for talking-head/narrated footage)",
+      "description": "Video marketing skills for creators, marketers, and founders: competitor and feed research, hooks, scripts, carousels, posting, and rough-cut editing",
       "source": "./"
     }
   ]

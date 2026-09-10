@@ -1,0 +1,18 @@
+{
+  "skill_name": "hook-generator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write me hooks for a video about how I plan a month of content in one afternoon.",
+      "expected_output": "Should distill the payoff, pick 3-4 fitting structures from reference/structures.md, query the bank with find_hooks.py (never reading the CSV raw), check knowledge/winning-hooks.md if it exists, and deliver 6-8 spoken hooks grouped by structure in the voice from voice-dna.md, each with its framework and source view count, ending with one recommendation.",
+      "assertions": [
+        "Picks 3-4 structures from reference/structures.md",
+        "Queries the bank with find_hooks.py rather than reading the CSV",
+        "Delivers 6-8 spoken hooks, not captions",
+        "Shows the framework and view-count proof for each hook",
+        "Ends with a single recommendation"
+      ],
+      "files": []
+    }
+  ]
+}

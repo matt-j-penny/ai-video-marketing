@@ -1,0 +1,18 @@
+{
+  "skill_name": "dm-revival",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "grind my dms",
+      "expected_output": "Should load the Claude-in-Chrome tools in one ToolSearch call, read backbone/icp.md, backbone/offer.md, voice-dna.md and the outreach/dm-revival/log.json ledger (resurfacing held drafts and running the 40/day and 15/hour cap preflight), only work existing threads, classify lost leads as interest signal plus 3+ days of dead air, profile-check each lead in a new tab, and present drafts in numbered batches of 5 without typing anything into a message box until the creator approves.",
+      "assertions": [
+        "Reads icp.md, offer.md, voice-dna.md and the log before drafting",
+        "Runs the daily and hourly send-cap preflight from the log",
+        "Never messages an account with no prior thread",
+        "Drafts are one line, under ~40 words, end in one easy question, and contain no pitch or link",
+        "Checkpoints every 5 drafts and sends only approved ones"
+      ],
+      "files": []
+    }
+  ]
+}

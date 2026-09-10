@@ -1,0 +1,17 @@
+{
+  "skill_name": "transcribe-url",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What's this reel saying? https://www.instagram.com/reel/EXAMPLE/",
+      "expected_output": "Should grep transcripts/url/ and transcripts/local/ for the URL first, run transcribe-url.sh from the repo root (whisper fallback since it isn't YouTube), read the markdown it wrote, lead the reply with the gist before the transcript, and mention the saved transcripts/url/ path.",
+      "assertions": [
+        "Checks for an existing transcript before re-running",
+        "Runs transcribe-url.sh rather than improvising a download",
+        "Leads the reply with the gist",
+        "Mentions the saved transcript path"
+      ],
+      "files": []
+    }
+  ]
+}

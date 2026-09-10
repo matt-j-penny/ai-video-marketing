@@ -1,0 +1,10 @@
+{
+  "name": "carousel-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Renders 4:5 Instagram carousel slides from a JSON manifest via Playwright + HTML/CSS",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "1.60.0"
+  }
+}

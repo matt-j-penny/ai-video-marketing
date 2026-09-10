@@ -1,0 +1,18 @@
+{
+  "skill_name": "voice-corpus-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build my voice corpus. My YouTube is @mychannel and my Instagram is @myhandle.",
+      "expected_output": "Should rank YouTube uploads with yt-top.sh and write entries with yt-entry.sh, run one Apify scrape of the Instagram handle and pipe the dataset through ig-entries.sh, tag every entry with tag.py until zero TODOs remain, regenerate voice-corpus/index.md with build-index.py, draft voice-dna.md from reference/voice-dna-template.md with every bullet grounded in quoted corpus lines and counts, and verify with find_voice.py --list.",
+      "assertions": [
+        "Uses yt-top.sh and yt-entry.sh for YouTube",
+        "Uses one Apify scrape plus ig-entries.sh for Instagram",
+        "Tags every entry until no TODOs remain",
+        "Grounds every voice-dna.md bullet in quoted corpus lines",
+        "Verifies with find_voice.py --list"
+      ],
+      "files": []
+    }
+  ]
+}

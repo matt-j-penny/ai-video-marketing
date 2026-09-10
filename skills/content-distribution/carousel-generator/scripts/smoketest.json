@@ -1,0 +1,18 @@
+{
+  "slug": "_smoketest",
+  "topic": "Install smoke test",
+  "theme": "midnight",
+  "font": "character",
+  "handle": "@yourhandle",
+  "slides": [
+    { "type": "cover", "kicker": "SETUP", "headline": "It *works*.", "subhead": "If you can read this slide, the renderer is good.", "swipe": "Swipe" },
+    { "type": "statement", "kicker": "NEXT", "headline": "Ask Claude to *make a carousel*.", "body": "Or scaffold one: node .claude/skills/carousel-generator/scripts/library.js new ai-system-breakdown my-slug" },
+    { "type": "cta", "kicker": "DONE", "headline": "You're set up.", "action": "Delete this file whenever" }
+  ],
+  "caption": {
+    "hook": "smoke test",
+    "body": "render pipeline OK",
+    "cta": "n/a",
+    "hashtags": ["#test"]
+  }
+}

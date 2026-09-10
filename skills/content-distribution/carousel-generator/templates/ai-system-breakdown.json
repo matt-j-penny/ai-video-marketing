@@ -1,0 +1,31 @@
+{
+  "slug": "REPLACE-ME",
+  "topic": "How I automated <the boring thing> with one system",
+  "theme": "obsidian",
+  "font": "grotesk",
+  "handle": "@yourhandle",
+  "cover": {
+    "concept": "Cinematic product-hero shot of a sleek matte-black machine sitting on a raw concrete workbench in a dim industrial studio, a single warm key light raking across its surface, faint acid-lime rim glow, volumetric haze, shallow depth of field, photoreal, ultra high contrast, no text, no screens, no user interface, no buttons, no logos",
+    "face_refs": false,
+    "aspect": "4:5",
+    "variants": 3
+  },
+  "slides": [
+    { "type": "cover_image", "image": "", "kicker": "SYSTEM BREAKDOWN", "headline": "I automated *<the boring thing>* with one system", "subhead": "Here's the exact build — steal it.", "swipe": "How it works" },
+    { "type": "statement", "kicker": "THE PROBLEM", "headline": "You're the *bottleneck* in your own business.", "body": "Every task waits on you. The busywork eats the whole day." },
+    { "type": "list", "kicker": "THE BUILD", "headline": "The stack", "items": [
+      { "title": "Trigger", "body": "What kicks it off automatically." },
+      { "title": "Worker", "body": "The part that does the actual job." },
+      { "title": "Action", "body": "Where the output lands, hands-free." }
+    ]},
+    { "type": "media", "kicker": "PROOF", "headline": "It runs while I sleep.", "image": "", "body": "Drop a screenshot of the system running here." },
+    { "type": "stat", "kicker": "THE RESULT", "value": "<NUMBER>", "label": "<what it measures, from backbone/messaging.md>" },
+    { "type": "cta", "kicker": "YOUR MOVE", "headline": "Want the exact build?", "body": "I break down every system inside <offer name>.", "action": "Comment <KEYWORD> and I'll send the link" }
+  ],
+  "caption": {
+    "hook": "I automated <the boring thing> with one system. Here's the build 👇",
+    "body": "Most people think they have a time problem. You don't, you have a delegation problem. Here's the exact stack I used to hand <the boring thing> off and never touch it again.",
+    "cta": "Comment <KEYWORD> and I'll send you the link to <offer name>. <deliverables from backbone/offer.md>. See you in there.",
+    "hashtags": ["#<niche-tag-1>", "#<niche-tag-2>", "#<niche-tag-3>"]
+  }
+}

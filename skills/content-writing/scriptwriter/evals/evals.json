@@ -1,0 +1,18 @@
+{
+  "skill_name": "scriptwriter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Script this: https://www.instagram.com/reel/EXAMPLE/ I want my own take on this format.",
+      "expected_output": "Should decide short-form, spawn a subagent that transcribes the source with transcribe-url.sh and returns a format skeleton, load voice-dna.md and knowledge/ pages, pull 2-3 matching few-shot entries with find_voice.py, propose one twist grounded in backbone/messaging.md's proof bank, draft a beat sheet of complete-sentence beats with one CTA from backbone/offer.md, run a fresh-context voice-lint subagent, then create the Notion page with Status Scripting, Format Short-form, the Source URL, and Type left blank. If voice-corpus/ is missing it should stop and point to voice-corpus-builder.",
+      "assertions": [
+        "Transcribes the source inside a subagent via transcribe-url.sh",
+        "Pulls few-shot examples with find_voice.py before drafting",
+        "Proposes a twist built only on real proof from backbone/messaging.md",
+        "Runs a fresh-context voice-lint pass",
+        "Creates the Notion page with Status Scripting and leaves Type blank"
+      ],
+      "files": []
+    }
+  ]
+}

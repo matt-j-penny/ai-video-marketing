@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--
+  yt-feed-research REPORT TEMPLATE — "Algorithm Field Report"
+  ============================================================
+  Fill the {{PLACEHOLDERS}} and duplicate the marked card partials. Everything
+  else ships as-is: fonts, favicon (🔬), grain, heat scale, animations.
+
+  SLOTS
+    {{DATE}}            e.g. 2026-07-12
+    {{IDEA_COUNT}}      long-form ideas saved (shorts don't count)
+    {{PASS_COUNT}}      feed passes run
+    {{DISMISS_COUNT}}   total dismissals applied
+    {{BLOCK_COUNT}}     channel-level blocks
+    {{FEED_STATE}}      one-sentence before/after on feed quality
+    {{TOP_CARDS}}       card partials — outliers, keep multiplier order
+    {{PICK_CARDS}}      card partials — remaining keeps
+    {{BORDERLINE_CARDS}} card partials with class "card borderline"
+    {{BLOCKED_TAGS}}    <span class="tag">⛔ Channel Name</span> per block
+    {{DISMISS_ITEMS}}   <li>Title (Channel)</li> per video-level dismissal
+    {{TOP_COUNT}} {{PICK_COUNT}} {{BORDERLINE_COUNT}}  section counts
+
+  CARD PARTIAL (duplicate per video; omit .note if you have nothing sharp to say;
+  omit .plate when multiplier is unknown; badge classes: b-views / b-vph / b-mult)
+
+    <a class="card" href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank">
+      <div class="frame"><img src="https://i.ytimg.com/vi/VIDEO_ID/hqdefault.jpg" alt="" loading="lazy">
+        <span class="plate heat3">94.4&times;</span></div>
+      <div class="body">
+        <h3>Video Title Here</h3>
+        <p class="meta">Channel Name &middot; 5.17K subs &middot; 13 days</p>
+        <p class="badges"><span class="b b-views">69K views</span><span class="b b-vph">153 VPH</span><span class="b b-mult heat3">94.4&times; outlier</span></p>
+        <p class="note">One-line remix angle in the creator's direction.</p>
+      </div>
+    </a>
+
+  HEAT SCALE (plate + b-mult): heat3 = ≥20x · heat2 = 5–20x · heat1 = 1.5–5x · none below 1.5x
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feed Research — {{DATE}}</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔬</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e11; --panel:#14181d; --panel-2:#171c22; --line:#232a32; --line-soft:#1b2128;
+    --text:#e9e6e0; --muted:#8d939c; --faint:#5c636d;
+    --ember:#ff5a2e; --amber:#ffb757; --gold:#ffd27a; --lime:#b8e63f; --sky:#7cc7ff;
+    --display:'SF Pro Display',-apple-system,'Helvetica Neue',sans-serif; --sans:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;padding-bottom:110px;position:relative}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.05;
+    background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="140" height="140" filter="url(%23n)" opacity="0.55"/></svg>')}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background:radial-gradient(900px 420px at 18% -8%, rgba(255,90,46,.10), transparent 60%),
+               radial-gradient(700px 380px at 88% -12%, rgba(124,199,255,.05), transparent 55%)}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 44px;position:relative;z-index:2}
+
+  /* ── hero ─────────────────────────────────── */
+  header{padding:64px 0 34px;border-bottom:1px solid var(--line);animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ember);margin-bottom:18px}
+  .eyebrow::before{content:"◉ ";color:var(--amber)}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.05;letter-spacing:-.022em}
+  .standfirst{margin-top:16px;max-width:640px;color:var(--muted);font-size:15.5px}
+  .statrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .stat{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 15px;background:var(--panel)}
+  .stat b{color:var(--text);font-weight:600;margin-right:6px}
+  .stat.hot{border-color:rgba(255,90,46,.4)} .stat.hot b{color:var(--ember)}
+
+  /* ── section anchors nav ──────────────────── */
+  nav{position:sticky;top:0;z-index:8;background:linear-gradient(rgba(11,14,17,.92),rgba(11,14,17,.86));backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+  nav .wrap{display:flex;gap:26px;padding-top:13px;padding-bottom:13px;overflow-x:auto}
+  nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;white-space:nowrap}
+  nav a:hover{color:var(--gold)}
+  nav a b{color:var(--faint);font-weight:500;margin-left:5px}
+
+  /* ── sections ─────────────────────────────── */
+  section{margin-top:64px}
+  .shead{display:flex;align-items:baseline;gap:16px;margin-bottom:24px}
+  .shead .idx{font-family:var(--mono);font-size:12px;color:var(--ember);letter-spacing:.12em}
+  .shead h2{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.015em}
+  .shead .rule{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-6px)}
+  .shead .count{font-family:var(--mono);font-size:11.5px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+
+  /* ── cards ────────────────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px}
+  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--text);
+    transition:transform .22s cubic-bezier(.2,.7,.2,1),border-color .22s,box-shadow .22s;animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+  .grid .card:nth-child(2){animation-delay:.05s}.grid .card:nth-child(3){animation-delay:.1s}.grid .card:nth-child(4){animation-delay:.15s}
+  .grid .card:nth-child(5){animation-delay:.2s}.grid .card:nth-child(6){animation-delay:.25s}.grid .card:nth-child(n+7){animation-delay:.3s}
+  .card:hover{transform:translateY(-4px);border-color:#39424d;box-shadow:0 18px 44px -18px rgba(0,0,0,.65)}
+  .frame{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000}
+  .frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .card:hover .frame img{transform:scale(1.045)}
+  .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 62%,rgba(11,14,17,.55));}
+  .plate{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--mono);font-weight:600;font-size:13px;padding:5px 10px;border-radius:8px;background:rgba(11,14,17,.82);backdrop-filter:blur(4px);border:1px solid var(--line)}
+  .body{padding:15px 17px 17px}
+  h3{font-size:15.5px;font-weight:600;line-height:1.34;letter-spacing:-.005em}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:7px;letter-spacing:.02em}
+  .badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .b{font-family:var(--mono);font-size:11px;font-weight:500;padding:3.5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--panel-2)}
+  .b-views{color:var(--lime);border-color:rgba(184,230,63,.25)}
+  .b-vph{color:var(--sky);border-color:rgba(124,199,255,.25)}
+  .heat1{color:var(--gold);border-color:rgba(255,210,122,.35)}
+  .heat2{color:var(--amber);border-color:rgba(255,183,87,.45)}
+  .heat3{color:var(--ember);border-color:rgba(255,90,46,.55)}
+  .plate.heat3{box-shadow:0 0 22px -4px rgba(255,90,46,.5)}
+  .note{font-family:var(--display);font-style:italic;font-size:13px;color:#b9b3a8;margin-top:11px;line-height:1.45}
+  .note::before{content:"— "}
+  .card.borderline{opacity:.86;border-style:dashed}
+
+  /* ── summary + log ────────────────────────── */
+  .fieldnote{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:14px;padding:20px 26px;margin-top:34px;
+    font-size:14.5px;color:#c9c4bb;max-width:880px;animation:rise .7s .15s cubic-bezier(.2,.7,.2,1) both}
+  .fieldnote b{color:var(--text)}
+  .fieldnote .k{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ember);display:block;margin-bottom:8px}
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:26px}
+  .tag{font-family:var(--mono);font-size:12px;color:#d8a49a;background:rgba(255,90,46,.07);border:1px solid rgba(255,90,46,.22);border-radius:999px;padding:6px 14px}
+  .dismissed{columns:2;column-gap:56px;list-style:none;max-width:980px}
+  .dismissed li{font-size:13.5px;color:var(--muted);padding:6px 0;border-bottom:1px dotted var(--line-soft);break-inside:avoid}
+  .dismissed li::before{content:"✕  ";color:var(--ember);font-family:var(--mono)}
+  footer{margin-top:90px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (max-width:720px){.wrap{padding:0 20px}.dismissed{columns:1}header{padding-top:40px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">yt-feed-research · algorithm field report</p>
+    <h1>YouTube Feed Research</h1>
+    <p class="standfirst">Logged-in home-feed scan with live tailoring — every off-niche tile dismissed, every refresh sharper. Outlier metrics via VidIQ at scan time.</p>
+    <div class="statrow">
+      <span class="stat hot"><b>{{IDEA_COUNT}}</b>ideas saved</span>
+      <span class="stat"><b>{{PASS_COUNT}}</b>feed passes</span>
+      <span class="stat"><b>{{DISMISS_COUNT}}</b>dismissals</span>
+      <span class="stat"><b>{{BLOCK_COUNT}}</b>channel blocks</span>
+      <span class="stat"><b>{{DATE}}</b></span>
+    </div>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#outliers">01 Outliers<b>{{TOP_COUNT}}</b></a>
+  <a href="#picks">02 Strong picks<b>{{PICK_COUNT}}</b></a>
+  <a href="#borderline">03 Borderline<b>{{BORDERLINE_COUNT}}</b></a>
+  <a href="#log">04 Tailoring log</a>
+</div></nav>
+
+<div class="wrap">
+
+  <div class="fieldnote"><span class="k">Feed state</span>{{FEED_STATE}}</div>
+
+  <section id="outliers">
+    <div class="shead"><span class="idx">01</span><h2>Top outliers</h2><span class="rule"></span><span class="count">{{TOP_COUNT}} videos</span></div>
+    <div class="grid">
+{{TOP_CARDS}}
+    </div>
+  </section>
+
+  <section id="picks">
+    <div class="shead"><span class="idx">02</span><h2>Strong picks</h2><span class="rule"></span><span class="count">{{PICK_COUNT}} videos</span></div>
+    <div class="grid">
+{{PICK_CARDS}}
+    </div>
+  </section>
+
+  <section id="borderline">
+    <div class="shead"><span class="idx">03</span><h2>Borderline</h2><span class="rule"></span><span class="count">logged, not counted</span></div>
+    <div class="grid">
+{{BORDERLINE_CARDS}}
+    </div>
+  </section>
+
+  <section id="log">
+    <div class="shead"><span class="idx">04</span><h2>Tailoring log</h2><span class="rule"></span><span class="count">what got cut &amp; why the feed improves</span></div>
+    <div class="tags">
+{{BLOCKED_TAGS}}
+    </div>
+    <ul class="dismissed">
+{{DISMISS_ITEMS}}
+    </ul>
+  </section>
+
+  <footer>
+    <span>content-os · yt-feed-research</span>
+    <span>generated {{DATE}}</span>
+  </footer>
+
+</div>
+</body>
+</html>

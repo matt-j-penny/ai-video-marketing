@@ -4,3 +4,4 @@ node_modules/
 __pycache__/
 *.pyc
 skills/video-analysis/peek/runs/
+.env

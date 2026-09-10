@@ -1,0 +1,30 @@
+{
+  "slug": "REPLACE-ME",
+  "topic": "The <thing> everyone gets wrong",
+  "theme": "plum",
+  "font": "impact",
+  "handle": "@yourhandle",
+  "cover": {
+    "concept": "High-contrast cinematic still life: on the left a cracked marble pedestal crumbling into dust, on the right a clean machined-steel gear catching the light, dramatic single-source rim lighting, deep black shadows, magenta accent glow, volumetric haze, photoreal, ultra high contrast, no text, no screens, no user interface, no logos",
+    "face_refs": false,
+    "aspect": "4:5",
+    "variants": 3
+  },
+  "slides": [
+    { "type": "cover_image", "image": "", "kicker": "READ THIS", "headline": "The *<thing>* everyone gets wrong", "subhead": "And what actually works instead.", "swipe": "Swipe" },
+    { "type": "statement", "kicker": "THE MYTH", "headline": "\"You need *<expensive thing>* to pull this off.\"", "body": "That's the overpriced version talking." },
+    { "type": "statement", "kicker": "THE REALITY", "headline": "You can build it yourself for *almost nothing*.", "body": "Real working systems, not slideware." },
+    { "type": "list", "kicker": "DO THIS", "headline": "The 3 moves", "items": [
+      { "title": "Move one", "body": "First concrete step." },
+      { "title": "Move two", "body": "Second concrete step." },
+      { "title": "Move three", "body": "Third concrete step." }
+    ]},
+    { "type": "cta", "kicker": "YOUR MOVE", "headline": "I'll show you how.", "body": "Every build is inside <offer name>.", "action": "Comment <KEYWORD> and I'll send the link" }
+  ],
+  "caption": {
+    "hook": "The <thing> everyone gets wrong (and what actually works) 👇",
+    "body": "Stop overpaying for <expensive thing>. Here's the real version you can build yourself.",
+    "cta": "Comment <KEYWORD> and I'll send you the link to <offer name>. <deliverables from backbone/offer.md>.",
+    "hashtags": ["#<niche-tag-1>", "#<niche-tag-2>", "#<niche-tag-3>"]
+  }
+}

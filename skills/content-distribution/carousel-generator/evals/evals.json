@@ -1,0 +1,19 @@
+{
+  "skill_name": "carousel-generator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make a carousel about why most people's content calendars fall apart by week two.",
+      "expected_output": "Should write carousel/outputs/<slug>/carousel.json with one theme and one font, 6-9 slides starting with a cover_image slide and ending with a cta slide tied to backbone/offer.md, a textless cover concept ending in the no text/no screens/no UI/no logos clause, body copy in the voice from voice-dna.md with no emoji on slides, then run cover.py and render.js --preview as the approval gate before the final PNG render.",
+      "assertions": [
+        "Writes the manifest under carousel/outputs/<slug>/",
+        "Uses exactly one theme and one font for the deck",
+        "Has 6-9 slides, cover_image first and cta last",
+        "Cover concept is textless with no UI metaphors",
+        "Shows the --preview deck for approval before rendering final PNGs",
+        "CTA comes from backbone/offer.md and nothing on its NOT-sold list"
+      ],
+      "files": []
+    }
+  ]
+}

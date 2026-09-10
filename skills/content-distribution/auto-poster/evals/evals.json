@@ -1,0 +1,18 @@
+{
+  "skill_name": "auto-poster",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Post ~/Downloads/final-reel.mp4 to Instagram and TikTok. I don't have a caption, just write one.",
+      "expected_output": "Should run transcribe_for_caption.sh and read the path it prints, write a caption from the transcript (spoken CTA on line 1 only if the video actually says one, no manufactured CTA or link) to a session-scoped mktemp file rather than a fixed /tmp path, run post_to_zernio.py with --platforms instagram,tiktok and --caption-file, report the Zernio post IDs/statuses/URLs, and flip the video's Notion page to Posted with today's Post Date.",
+      "assertions": [
+        "Transcribes with transcribe_for_caption.sh instead of inventing a caption",
+        "Writes the caption to a session-scoped file, not a predictable shared /tmp path",
+        "Does not add a CTA or link the video didn't say",
+        "Posts with post_to_zernio.py narrowed to instagram,tiktok",
+        "Reports post IDs/statuses and updates the Notion page to Posted"
+      ],
+      "files": []
+    }
+  ]
+}

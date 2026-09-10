@@ -1,0 +1,18 @@
+{
+  "skill_name": "yt-feed-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tailor my YouTube feed and find me 20 video ideas.",
+      "expected_output": "Should derive and state KEEP/DISMISS lists from the CLAUDE.md Niche line, backbone/offer.md, backbone/icp.md and competitor-list.md before the first extract, inject feed-tools.js after every navigation, save only long-form ideas with real traction (roughly 1K+ views), dismiss off-niche tiles at most 3 per javascript_tool call, refresh and repeat until 20 ideas, and fill assets/report-template.html into research/YT-Feed-Research_<timestamp>.html.",
+      "assertions": [
+        "States the derived KEEP/DISMISS lists before scanning",
+        "Re-injects feed-tools.js after each navigation",
+        "Never saves Shorts as ideas",
+        "Runs at most 3 dismissals per JavaScript call",
+        "Writes the report from assets/report-template.html into research/"
+      ],
+      "files": []
+    }
+  ]
+}

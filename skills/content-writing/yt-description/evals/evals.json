@@ -1,0 +1,19 @@
+{
+  "skill_name": "yt-description",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the YouTube description for the video I just finished.",
+      "expected_output": "Should resolve the video (video-editor job folder and Notion page), pull the live skeleton with fetch_skeleton.sh --channel from the CLAUDE.md Creator Profile, get the script from collect_script.py or the Notion beat sheet, index the final export with chapter_index.sh and time chapters with find_times.py (rejecting scores under 0.6), follow YouTube's chapter rules, pick links only from references/links.md or flag new ones, use no em dashes, save to descriptions/, and print the raw block in one fenced code block with flags.",
+      "assertions": [
+        "Pulls the skeleton live with fetch_skeleton.sh",
+        "Takes chapter timestamps from the final exported file",
+        "Rejects find_times.py matches scoring under 0.6",
+        "First chapter is 0:00 with at least 3 chapters",
+        "Never invents a URL; new links are flagged",
+        "Contains no em dashes"
+      ],
+      "files": []
+    }
+  ]
+}

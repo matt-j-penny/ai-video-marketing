@@ -1,0 +1,18 @@
+{
+  "skill_name": "yt-competitor-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What's working on YouTube this week for @chan_one and @chan_two?",
+      "expected_output": "Should pull each channel's 20 newest /videos URLs with yt-dlp (version check first, single-line loop, no nested shell loops), build the TSV with awk, parallel-fetch metadata with xargs -P 20, run rank-and-select.py with --expect to enforce the 7-day window and compute breakout, spawn one subagent per pick that analyzes only the title and thumbnail (no download or transcription), and build the HTML report into research/.",
+      "assertions": [
+        "Uses yt-dlp only: no Apify, browser, or cookies",
+        "Avoids nested shell loops",
+        "Lets rank-and-select.py enforce the 7-day window and ranking",
+        "Subagents analyze title + thumbnail packaging only",
+        "Delivers research/YT-Competitor-Research_<RUN>.html plus the ranked table and pattern"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "skill_name": "ig-feed-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Scan my Instagram feed for content ideas.",
+      "expected_output": "With the CLAUDE.md Creator Profile Niche line still holding a <<placeholder>>, should stop before opening Instagram and tell the user to apply their brand kit first (brand-kit.md), since the KEEP/DISMISS filter is derived from that line plus backbone/offer.md, backbone/icp.md and competitor-list.md.",
+      "assertions": [
+        "Reads the Niche line from CLAUDE.md before scanning",
+        "Stops when the Niche line is still a placeholder",
+        "Tells the user to apply their brand kit first",
+        "Does not dismiss or interact with any Instagram post"
+      ],
+      "files": []
+    }
+  ]
+}
