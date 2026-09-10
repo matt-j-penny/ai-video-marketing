@@ -1,0 +1,32 @@
+{
+  "skill_name": "create-frames-md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm starting a series of animated explainer videos and want all the motion to feel consistent, but I don't have any reference videos or existing animations yet. Can you set up a frames.md for how things should move?",
+      "expected_output": "Should recognize there's no reference material and run the guided question set (where the motion lives, feel, tempo, physics, frame rate/format, toolchain, sync, reference points, off-limits) as one batched set before drafting. Should check for an existing DESIGN.md. Should not invent a motion system without asking first.",
+      "assertions": [
+        "Identifies there is no reference material to extract from",
+        "Asks the guided question set rather than guessing a motion style",
+        "Asks the questions together as a batch, not one per turn",
+        "Asks about frame rate and animation toolchain",
+        "Does not draft frames.md sections before getting answers"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "My Remotion project in ./video already has a bunch of scenes animated the way I like. Write a frames.md documenting how the motion works so future scenes match.",
+      "expected_output": "Should treat this as extraction from existing code: read the Remotion source for spring() configs, interpolate() ranges, Easing values, durationInFrames and stagger offsets, and produce all 11 sections with the real values found (durations in both ms and frames at the project fps, exact spring/bezier values) plus Remotion-specific implementation mapping.",
+      "assertions": [
+        "Reads the existing animation code rather than guessing values",
+        "Produces all 11 required sections",
+        "States the frame rate and gives every duration in both ms and frames",
+        "Gives exact spring configs or bezier curves rather than vague adjectives",
+        "Implementation mapping uses Remotion spring()/interpolate() values",
+        "Includes an agent prompt guide with runnable example prompts"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -16,6 +16,7 @@ Skills are markdown files that give AI agents specialized knowledge and workflow
 | [video-editing/rough-cut](skills/video-editing/rough-cut/) | Turn a raw talking-head or narrated video into a rough cut — strip dead air and remove bad takes (false starts, repeated takes, fluffs) using a word-level-timestamp transcript. |
 | [video-editing/level-audio](skills/video-editing/level-audio/) | Even out a video's narration so no part is noticeably louder or quieter than the rest, using loudness-range measurement and speech-specific dynamics processing. |
 | [video-editing/create-design-md](skills/video-editing/create-design-md/) | Create a DESIGN.md design-system doc — from a live site, existing code, or a guided question set when there's no reference material — so motion graphics, title cards, and on-screen UI stay visually consistent. |
+| [video-editing/create-frames-md](skills/video-editing/create-frames-md/) | Create a frames.md motion-system doc — timing tokens, easing/springs, entrances/exits, stagger, transitions, and sync rules — from a reference video, existing animation code, or a guided question set, so every animated element moves consistently. |
 | [video-production/storyboard](skills/video-production/storyboard/) | Explicit-only (`/storyboard`): build a reviewable beat-by-beat storyboard from a script or video, then turn approved beats into HTML, React, and Remotion scenes. |
 
 ## Installation
@@ -79,6 +80,9 @@ Once installed, just ask your agent to help with video editing tasks:
 "Build me a DESIGN.md for the title cards and lower-thirds in this explainer video"
 → Uses video-editing/create-design-md skill
 
+"Write a frames.md so all the animations in my explainer series move the same way"
+→ Uses video-editing/create-frames-md skill
+
 "/storyboard turn this script into a storyboard I can review"
 → Uses video-production/storyboard skill
 ```
@@ -90,6 +94,7 @@ You can also invoke a skill directly:
 /rough-cut
 /level-audio
 /create-design-md
+/create-frames-md
 /storyboard
 ```
 
