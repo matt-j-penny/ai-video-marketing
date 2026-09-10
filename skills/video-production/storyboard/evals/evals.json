@@ -24,6 +24,18 @@
         "Updates the implementation preview with scene/source/render links"
       ],
       "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "$storyboard Scenes are built for my talking-head video. Beat 3 is a lower-third callout over me talking, and beats 5 and 6 are full-screen graphics with about half a second of me on camera between them. Check it all over before I render.",
+      "expected_output": "Should render frames sampled across each beat (not just the first frame) composited over the source video, confirm the beat 3 callout never overlaps the speaker's face and reposition or shrink it if it does, and flag the ~0.5s return to footage between beats 5 and 6 as a glitch — merging the two full-screen graphics into one continuous run rather than cutting back to the speaker for under a second.",
+      "assertions": [
+        "Renders and inspects composited frames rather than reviewing from code",
+        "Samples frames across the whole overlay beat, not only its first frame",
+        "Moves or resizes the callout if it overlaps the face, instead of just lowering opacity",
+        "Merges beats 5 and 6 into one continuous graphic run because the footage gap is under ~1s"
+      ],
+      "files": []
     }
   ]
 }
