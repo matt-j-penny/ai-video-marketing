@@ -3,13 +3,13 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "/storyboard Here's my explainer script (script.md). Can you break it into a storyboard I can review?",
-      "expected_output": "Should divide the script into visual beats (not a fixed count), generate an opaque 16:9 storyboard image per graphic beat, write a manifest following the documented schema with stable beat IDs, and build a standalone local HTML preview showing each beat's image, script range/transcript excerpt, visual objective, and review status. Should stop for review rather than building React/Remotion scenes.",
+      "prompt": "/storyboard Here's my talking-head clip (clip.mp4). Turn it into a finished video with motion graphics.",
+      "expected_output": "Should transcribe the clip with word-level timestamps, divide it into visual beats (not a fixed count), generate an opaque 16:9 storyboard image per graphic beat with a manifest and HTML preview, build an HTML and React file per graphic beat matched to its image via a screenshot feedback loop, assemble a Remotion composition with components animating in on the words that reference them, render the final video with the graphics incorporated over the source clip and its original audio, and copy the MP4 to ~/Downloads — all without stopping for review.",
       "assertions": [
-        "Stays in storyboard mode, does not create Remotion/React scene files",
-        "Generates opaque-background images for graphic beats, not transparent",
-        "Writes a manifest with stable beat IDs matching references/preview-schema.md",
-        "Produces a standalone local HTML preview usable without a dev server"
+        "Runs all four stages without stopping for review",
+        "Creates both an HTML and a React file per graphic beat and compares screenshots against the storyboard image",
+        "Times component animations to the transcript word timestamps",
+        "Renders the final video with source audio and copies it to ~/Downloads"
       ],
       "files": []
     },
