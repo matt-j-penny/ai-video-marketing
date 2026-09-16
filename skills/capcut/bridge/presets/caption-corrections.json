@@ -1,0 +1,21 @@
+{
+  "_README": "Transcription fixes for your talking-head videos. Applied ONCE to the canonical transcript (outputs/<job>.transcript.json) when rough-cut splices it, so the fix flows to graphics AND captions AND every format — not just burned-in captions. The raw transcript/words.json is left untouched. 'auto' = whole-word, case-insensitive replacements applied silently, matched ONE WORD AT A TIME — keys must be single-token (a multi-word key like 'open ai' can never match). 'flag' = ambiguous words (real word OR a mishear) PRINTED for you to eyeball in context each run. For a one-off fix on a single video, drop a corrections.local.json (same {auto,flag} shape) in that job folder. ADD YOUR OWN brand/product names here (and to brand-kit.md) — WhisperX mishears them. The entries below are generic casing fixes most creators want.",
+  "auto": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "iphone": "iPhone",
+    "ios": "iOS",
+    "api": "API",
+    "apis": "APIs",
+    "ai": "AI",
+    "ui": "UI",
+    "ux": "UX",
+    "url": "URL",
+    "saas": "SaaS",
+    "ceo": "CEO",
+    "diy": "DIY",
+    "faq": "FAQ"
+  },
+  "flag": []
+}

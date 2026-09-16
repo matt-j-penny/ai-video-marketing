@@ -1,0 +1,25 @@
+{
+ "id": "6EC828AB-8FD8-472F-A42C-BC59FD7E7FD4",
+ "type": "sticker_animation",
+ "animations": [
+  {
+   "id": "",
+   "type": "loop",
+   "start": 0,
+   "duration": 500000,
+   "path": "/Users/creator/Library/Containers/com.lemon.lvoverseas/Data/Movies/CapCut/User Data/Cache/effect/3427150/a0221e35f8527f51247bf60822ea4414",
+   "platform": "all",
+   "resource_id": "7131927521469141505",
+   "third_resource_id": "",
+   "source_platform": 0,
+   "name": "",
+   "category_id": "",
+   "category_name": "",
+   "panel": "",
+   "material_type": "sticker",
+   "anim_adjust_params": null,
+   "request_id": ""
+  }
+ ],
+ "multi_language_current": "none"
+}
