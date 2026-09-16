@@ -10,6 +10,8 @@ metadata:
 
 This skill has one job: when triggered, treat the task as the brief below — don't just add a graphic or two and stop.
 
+If starting from raw, uncut footage (no CapCut draft yet), use `capcut-full-edit` instead — it runs this same brief as phase 2 of a full rough-cut-then-graphics pipeline, and actually builds/places each graphic as a rendered overlay asset rather than just pointing at existing skills.
+
 ## The brief
 
 > Add motion graphics throughout the **entire** video, not just the hook or a couple of spots. Match the project's brand — colors, fonts, voice. Keep it **sleek and professional**, never cluttered or amateur. Keep it **fast-moving and engaging** — snappy transitions, no dead air. **There should always be something happening on screen**: no stretch of more than a few seconds with nothing moving, changing, or being introduced. Run the verification loop below before calling this done — don't report finished on a first pass.

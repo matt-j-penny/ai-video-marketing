@@ -1,14 +1,14 @@
 ---
 name: capcut-beat-detector
-description: "Find the interesting narrative beats in a talking-head/narration video from its word-level transcript — hook, punchlines, key stats, reactions, transitions — and write beats.json on the edited (post-cut) timeline. Use when the user wants to know 'what are the interesting moments', or as a prerequisite for capcut-zoom-highlights (where to zoom) or capcut-subtitles (which word to emphasize per line). Adapted from the Edit Pipeline's ev-beats stage, minus its HyperFrames-template selection (not applicable to CapCut)."
+description: "Find the interesting narrative beats in a talking-head/narration video from its word-level transcript — hook, punchlines, key stats, reactions, transitions — and write beats.json on the edited (post-cut) timeline. Use when the user wants to know 'what are the interesting moments', or as a prerequisite for capcut-zoom-highlights (where to zoom), capcut-subtitles (which word to emphasize per line), or capcut-full-edit (where/what type of motion graphic to build). Adapted from the Edit Pipeline's ev-beats stage, minus its HyperFrames-template selection (not applicable to CapCut)."
 metadata:
-  version: 1.0.0
-  last_updated: 2026-09-15
+  version: 1.1.0
+  last_updated: 2026-09-16
 ---
 
 # CapCut Beat Detector
 
-Storyboards a talking-head/narration video into **beats** — spans of the timeline worth calling out — without deciding *what graphic* goes on each one (that's a CapCut-specific decision made by whichever skill consumes this: `capcut-zoom-highlights` zooms, `capcut-subtitles` emphasizes a word). This skill only decides **where** and **why**.
+Storyboards a talking-head/narration video into **beats** — spans of the timeline worth calling out, each tagged with a broad category (zoom / graphic / caption-emphasis) — without designing or building the actual graphic (that's `capcut-zoom-highlights`, `capcut-subtitles`, or `capcut-full-edit`'s job). This skill decides **where**, **why**, and **roughly what kind**.
 
 Method carried over from the Edit Pipeline's `ev-beats` stage (`Edit Pipeline/.claude/skills/ev-beats/SKILL.md`) — the role vocabulary and "what earns a beat" judgment are the same; the HyperFrames template-matching half of that stage doesn't apply here and is dropped.
 
@@ -57,7 +57,11 @@ Summarize the throughline in one sentence, then walk sentence by sentence, taggi
     { "id": "b02", "start": 41.2, "end": 44.9, "role": "punchline",
       "reason": "payoff of the setup at b0X",
       "line": "...and that's the whole trick.",
-      "suggestedAction": "zoom" }
+      "suggestedAction": "zoom" },
+    { "id": "b03", "start": 12.0, "end": 18.4, "role": "evidence",
+      "reason": "a concrete stat worth putting on screen, not just said",
+      "line": "we cut render time from 40 minutes to 90 seconds",
+      "suggestedAction": "graphic", "layout": "overlay", "keyword": "90 seconds" }
   ]
 }
 ```
@@ -65,8 +69,9 @@ Summarize the throughline in one sentence, then walk sentence by sentence, taggi
 - `start`/`end` — edited-timeline seconds.
 - `reason` — why this earns a beat; never leave this blank, it's what lets a human (or the next skill) sanity-check the pick.
 - `line` — the exact spoken words in this span, for reference.
-- `suggestedAction` — `zoom` (emotional/emphasis moment, good candidate for `capcut-zoom-highlights`), `caption-emphasis` (a word worth highlighting in `capcut-subtitles` but not necessarily a camera move), or `none` (flagged as interesting but no specific action yet).
-- `keyword` (optional) — if there's one word that carries the beat (a stat, a name, the punch word), name it here so `capcut-subtitles` can pick it up as the highlighted word without re-deriving it.
+- `suggestedAction` — `zoom` (emotional/emphasis moment, good candidate for `capcut-zoom-highlights`), `graphic` (a showable worth an actual on-screen graphic, for `capcut-full-edit`/`capcut-add-motion-graphics`), `caption-emphasis` (a word worth highlighting in `capcut-subtitles` but not necessarily a camera move or graphic), or `none` (flagged as interesting but no specific action yet).
+- `layout` (only when `suggestedAction: "graphic"`) — `full-screen` (own opaque background, original footage fully hidden for this span), `overlay` (transparent graphic over the still-visible footage — a lower-third, a callout, a stat card), or `split` (footage cropped/repositioned to occupy part of the frame — e.g. a 9:16 crop docked to one third — while a graphic fills the rest). See `capcut-full-edit` for how each is actually built.
+- `keyword` (optional) — if there's one word or short phrase that carries the beat (a stat, a name, the punch word), name it here so `capcut-subtitles`/`capcut-full-edit` can pick it up without re-deriving it.
 
 Save as `beats.json` next to `transcript.json`.
 
@@ -78,7 +83,7 @@ Don't cluster beats — if two are within ~2s of each other, decide if they're r
 
 1. **Inventing showables that weren't actually said** to hit a beat quota.
 2. **Beats on source timestamps instead of edited-timeline** on a rough-cut video.
-3. **Every beat marked `zoom`** — most beats are just "interesting to know about"; only mark `zoom` where a camera move actually helps (emphasis, reaction, reveal), not every fact.
+3. **Every beat marked `zoom`/`graphic`** — most beats are just "interesting to know about"; only mark `zoom` where a camera move actually helps (emphasis, reaction, reveal), and `graphic` only where there's a real showable worth rendering, not every fact.
 4. **Skipping the `reason` field** — it's the only thing that lets this be checked later.
 
 ## Task-Specific Questions
