@@ -8,5 +8,6 @@
   "homepage": "https://github.com/matt-j-penny/ai-video-marketing",
   "repository": "https://github.com/matt-j-penny/ai-video-marketing",
   "license": "MIT",
-  "skills": "./skills"
+  "skills": "./skills",
+  "commands": "./commands"
 }
