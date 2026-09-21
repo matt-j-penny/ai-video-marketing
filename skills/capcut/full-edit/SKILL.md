@@ -14,15 +14,19 @@ Raw clip in, graphics-finished CapCut draft out. Two phases: cut it, then cover 
 
 Compare `last_updated` to today. Warn if >2 weeks stale, then continue.
 
+## Requirements
+
+Check every run, before anything else: `ffmpeg` on PATH, `DEEPGRAM_API_KEY` (transcription; falls back to ElevenLabs, then local Whisper), and `BRAVE_API_KEY` (web search for real logos, stats, and reference images). Look for each key in the `env` block of `~/.claude/settings.json` or the shell environment. If one is missing, ask the user to add it to `~/.claude/settings.json` themselves (Deepgram: https://console.deepgram.com, Brave: https://brave.com/search/api), or to skip it. Never write or request a key in chat.
+
 ## Preferences
 
-Every run starts here, before anything else. Preferences live in `~/.claude/full-edit-preferences.md` (per user, shared across projects).
+Every run starts here, before anything else. Preferences live in `~/.claude/full-edit-preferences.md` (per user, shared across projects and with the Remotion `full-edit`).
 
 - **File exists:** read it, tell the user in one line which preferences are being applied, and use them for the rest of the run. Explicit instructions in the current request override the file for that run only.
 - **File missing (or the user says "reset preferences"):** run setup before doing any editing. Ask these in one batch, offer the default for each, then write the answers to the file:
   1. Output canvas — 9:16, 16:9, or 1:1 (default 9:16)
   2. Brand reference — path/URL to a DESIGN.md or other brand file. If they have none, run `create-design-md` (guided questions, or from their site if they have one), then save the resulting DESIGN.md path
-  3. Cut aggressiveness — aggressive (0.3s gap threshold, default), moderate, or light
+  3. Cut aggressiveness — aggressive (0.3s gap threshold), moderate (0.4s), or light (0.6s). Default: moderate
   4. Graphic density — dense (default), moderate, or sparse
   5. Allowed layouts — any of `full-screen`, `overlay`, `split` (default: all)
   6. Sections to keep plain talking-head (e.g. "first 5 seconds", "serious moments"), or none
@@ -33,7 +37,7 @@ File format:
 # Full Edit Preferences
 - canvas: 9:16
 - brand: <path to DESIGN.md or brand file>
-- cut: aggressive
+- cut: moderate
 - density: dense
 - layouts: full-screen, overlay, split
 - plain_sections: none
@@ -46,7 +50,7 @@ Then continue with the run.
 1. Path to the raw source video, and a draft name for the new CapCut project.
 2. Brand reference — from preferences; if empty, run `create-design-md` rather than inventing a palette.
 3. Output canvas — from preferences; the split-layout crop/dock math (phase 2, step 3c) depends on it.
-4. Cut aggressiveness — from preferences (`aggressive` = `capcut-rough-cut`'s 0.3s gap threshold).
+4. Cut aggressiveness — from preferences (`aggressive` = 0.3s gap threshold, `moderate` = 0.4s, `light` = 0.6s).
 5. Graphic density, allowed layouts, and plain sections — from preferences. In phase 2, only tag beats with allowed layouts and skip beats inside plain sections.
 
 ## Phase 1 — Rough cut
