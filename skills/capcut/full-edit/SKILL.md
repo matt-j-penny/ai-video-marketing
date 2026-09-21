@@ -14,12 +14,40 @@ Raw clip in, graphics-finished CapCut draft out. Two phases: cut it, then cover 
 
 Compare `last_updated` to today. Warn if >2 weeks stale, then continue.
 
+## Preferences
+
+Every run starts here, before anything else. Preferences live in `~/.claude/full-edit-preferences.md` (per user, shared across projects).
+
+- **File exists:** read it, tell the user in one line which preferences are being applied, and use them for the rest of the run. Explicit instructions in the current request override the file for that run only.
+- **File missing (or the user says "reset preferences"):** run setup before doing any editing. Ask these in one batch, offer the default for each, then write the answers to the file:
+  1. Output canvas — 9:16, 16:9, or 1:1 (default 9:16)
+  2. Brand reference — path/URL to a DESIGN.md or other brand file. If they have none, run `create-design-md` (guided questions, or from their site if they have one), then save the resulting DESIGN.md path
+  3. Cut aggressiveness — aggressive (0.3s gap threshold, default), moderate, or light
+  4. Graphic density — dense (default), moderate, or sparse
+  5. Allowed layouts — any of `full-screen`, `overlay`, `split` (default: all)
+  6. Sections to keep plain talking-head (e.g. "first 5 seconds", "serious moments"), or none
+
+File format:
+
+```markdown
+# Full Edit Preferences
+- canvas: 9:16
+- brand: <path to DESIGN.md or brand file>
+- cut: aggressive
+- density: dense
+- layouts: full-screen, overlay, split
+- plain_sections: none
+```
+
+Then continue with the run.
+
 ## Before Starting
 
 1. Path to the raw source video, and a draft name for the new CapCut project.
-2. Brand reference (colors/fonts/voice) — check the project for one; ask before inventing a palette if none exists.
-3. Output canvas — confirm aspect (9:16, 16:9, 1:1) before doing any split-layout geometry (phase 2, step 3c), since the crop/dock math depends on it.
-4. Cut aggressiveness — defaults to `capcut-rough-cut`'s aggressive default (0.3s gap threshold) unless told otherwise.
+2. Brand reference — from preferences; if empty, run `create-design-md` rather than inventing a palette.
+3. Output canvas — from preferences; the split-layout crop/dock math (phase 2, step 3c) depends on it.
+4. Cut aggressiveness — from preferences (`aggressive` = `capcut-rough-cut`'s 0.3s gap threshold).
+5. Graphic density, allowed layouts, and plain sections — from preferences. In phase 2, only tag beats with allowed layouts and skip beats inside plain sections.
 
 ## Phase 1 — Rough cut
 
@@ -88,6 +116,4 @@ Same loop as `capcut-add-motion-graphics` — run it in full, don't abbreviate:
 
 ## Task-Specific Questions
 
-1. Output canvas/aspect ratio for this project?
-2. Brand reference — existing file/spec, or gather colors/fonts/voice now?
-3. Any sections that should stay plain talking-head with no graphics (e.g. an intro hook, a serious moment)?
+Asked during Preferences setup; only re-ask if the current request contradicts the saved values.
