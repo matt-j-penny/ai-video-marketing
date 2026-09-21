@@ -10,6 +10,11 @@ metadata:
 
 Raw clip in, graphics-finished video out, all in Remotion and ffmpeg. Two phases: cut it, then cover it in motion graphics that are rendered and placed, not just planned. Brand-matched, sleek, fast-moving, never a dead stretch.
 
+## Ground Rules
+
+- **Always start from scratch.** Never look for, open, reuse, or learn from existing edits, transcripts, cuts, compositions, renders, or project folders derived from the source file (including earlier runs on the same clip). Work only from the raw source and the saved preferences. Every run builds a fresh project and re-transcribes the raw source.
+- **Never ask for permission or confirmation.** Once everything required is in hand, run the whole edit start to finish: no approvals, no "should I proceed", no checking in between steps. The only reason to ask the user anything is a missing required input (source path, saved preferences, brand file, API keys), and then ask up front, before editing starts.
+
 ## Freshness Check
 
 Compare `last_updated` to today. Warn if >2 weeks stale, then continue.
@@ -29,7 +34,7 @@ Look for each key in the `env` block of `~/.claude/settings.json` or the shell e
 Preferences live in `~/.claude/full-edit-preferences.md` (per user, shared across projects).
 
 - **File exists:** read it, tell the user in one line which preferences are being applied, and use them for the rest of the run. Explicit instructions in the current request override the file for that run only.
-- **File missing (or the user says "reset preferences"):** run setup before doing any editing. Ask these in one batch, offer the default for each, then write the answers to the file:
+- **File missing (or the user says "reset preferences"):** preferences must exist before any editing, so run setup first. Ask these in one batch, offer the default for each, then write the answers to the file:
   1. Output canvas — 9:16, 16:9, or 1:1 (default 9:16)
   2. Brand reference — path/URL to a DESIGN.md or other brand file. If they have none, run `create-design-md` (guided questions, or from their site if they have one), then save the resulting DESIGN.md path
   3. Cut aggressiveness — aggressive (0.3s gap threshold), moderate (0.4s, `rough-cut`'s default), or light (0.6s). Default: moderate
@@ -89,3 +94,4 @@ Nothing static for more than ~4-5s; quick in/out; keep some plain talking-head s
 4. A `split` scene whose cutout doesn't match the footage's docked rect.
 5. Reporting done before the Review Loop is clean.
 6. Asking for or writing API keys in chat; only point the user to `~/.claude/settings.json`.
+7. Asking for permission or confirmation when nothing required is missing, or reusing any earlier edit of the same source.
