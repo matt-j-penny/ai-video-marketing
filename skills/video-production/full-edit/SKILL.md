@@ -20,9 +20,9 @@ Check every run, before anything else:
 
 - **`ffmpeg`** and **`node`** on PATH (`ffmpeg -version`, `node -v`). Remotion installs through `npx`. If either is missing, stop and tell the user what to install.
 - **`DEEPGRAM_API_KEY`** — word-level transcription (`transcribe` falls back to ElevenLabs, then local Whisper, without it).
-- **`BRAVE_API_KEY`** — web search for real logos, stats, and reference images the graphics need.
+- **`BRAVE_API_KEY`** — web search for real logos and reference images the graphics need.
 
-Look for each key in the `env` block of `~/.claude/settings.json` or the shell environment. If a key is missing, ask the user to add it to `~/.claude/settings.json` themselves (Deepgram: https://console.deepgram.com, Brave: https://brave.com/search/api), or to skip it. Never write or request a key in chat. Skipping Deepgram means the Whisper/ElevenLabs fallback; skipping Brave means graphics use only what's in the transcript and the brand file.
+Look for each key in the `env` block of `~/.claude/settings.json` or the shell environment. If a key is missing, ask the user to add it to `~/.claude/settings.json` themselves (Deepgram: https://console.deepgram.com, Brave: https://brave.com/search/api), or to skip it. Never write or request a key in chat. Skipping Deepgram means the Whisper/ElevenLabs fallback; skipping Brave means no real logos or reference images.
 
 ## Preferences
 
@@ -67,9 +67,9 @@ Don't skip or abbreviate this; graphics timed against un-cut footage drift the m
 
 ## Phase 2 — Motion graphics
 
-Run the `storyboard` skill's four stages (Storyboard, Scenes, Composition, Final Video) and its Review Loop on the cut video from Phase 1. This invocation counts as the explicit request `storyboard` requires. Apply the preferences:
+Run the `storyboard` skill on the cut video from Phase 1, but **skip its AI image generation entirely**: no storyboard images, no overview image, no image-matching feedback loop. Plan beats as text (timestamps, transcript excerpt, layout, visual idea), then build each scene as HTML/React straight from the beat plan and the brand file, then Composition and Final Video, and run its Review Loop against the rendered frames and the beat plan instead of storyboard images. This invocation counts as the explicit request `storyboard` requires. Apply the preferences:
 
-- **Canvas** sets the Remotion composition size; storyboard images and scenes are built for it.
+- **Canvas** sets the Remotion composition size; scenes are built for it.
 - **Brand** file supplies colors, type, and components for every scene.
 - **Density** sets beat frequency: dense is roughly 1-2 graphics per 15-20s, moderate about half that, sparse only the strongest moments. Every graphic still needs a genuine showable; never invent one to hit a quota.
 - **Layouts** limits what each graphic beat may use:
@@ -77,7 +77,7 @@ Run the `storyboard` skill's four stages (Storyboard, Scenes, Composition, Final
   - `overlay` — transparent scene over the visible footage (lower-third, callout), placed clear of the face
   - `split` — footage scaled and docked to part of the frame while a moving scene fills the rest; confirm the footage's rect and the scene's cutout line up in rendered frames, not just in numbers
 - **Plain sections** get no graphics and no zooms.
-- Use Brave search for real logos, stats, and reference images when a beat calls for one.
+- Use Brave search for real logos and reference images when a beat calls for one (found, not AI-generated). Stats and numbers come only from what is said in the video, never from search.
 
 Nothing static for more than ~4-5s; quick in/out; keep some plain talking-head stretches so it reads sleek, not noisy.
 
