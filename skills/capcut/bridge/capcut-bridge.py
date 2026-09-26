@@ -48,6 +48,7 @@ USAGE = """Usage — file lane (structural builds; quits + relaunches the app ar
   replay <job> [--name <draft>]            # EDL -> new draft, one clip per cut
   add-overlay <draft> <mov> --at <s> [--layer N] [--dur <s>] [--src <s>] [--ri N] [--mute] [--force]
   add-text <draft> "<text>" --at <s> [--dur <s>] [--ri N] [--force]
+  add-audio <draft> <audio> [--at <s>] [--force]
   graphics <draft> <job>                   # place a job's whole graphics plan
   transform <draft> [--track main|text|overlay] [--index N] [--scale S] [--x X] [--y Y] [--rotate R] [--opacity O]
   remove <draft> [--track main|text|overlay] [--index N]
@@ -694,7 +695,12 @@ def cmd_replay(job, draft_name=None):
     raw = jobdir / "raw" / cuts["segments"][0]["clip"]
     if not raw.exists():
         sys.exit(f"raw footage missing: {raw}")
-    name = draft_name or job
+    create_draft(draft_name or job, raw, cuts, 1920, 1080)
+
+
+def create_draft(name, raw, cuts, canvas_w, canvas_h):
+    """New draft from one media file + an EDL (one main-track clip per segment)."""
+    raw = Path(raw)
     folder = DRAFT_ROOT / name
     if folder.exists():
         sys.exit(f"draft folder already exists: {folder} (pick another --name)")
@@ -716,7 +722,7 @@ def cmd_replay(job, draft_name=None):
         import shutil
         shutil.copy2(raw, local_raw)
 
-    draft, raw_dur_us, w, h = build_draft(name, local_raw, cuts, 1920, 1080)
+    draft, raw_dur_us, w, h = build_draft(name, local_raw, cuts, canvas_w, canvas_h)
     now_us = time.time_ns() // 1000
     draft_id = uid()
     (folder / "draft_info.json").write_text(
@@ -845,6 +851,62 @@ def add_overlay(name, media, at, level=1, duration=None, force=False,
     edit_draft(name, mutate)
     print(f"overlay: {Path(media).name} at {at:.2f}s on layer {level}"
           f"{'' if render_index is None else f' (render_index {render_index})'}")
+
+
+def audio_material(mid, path, dur_us):
+    """Local-file audio, the shape CapCut writes for an imported .mp3/.wav."""
+    blank = dict.fromkeys((
+        "unique_id", "category_name", "music_id", "text_id", "tone_type", "video_id",
+        "effect_id", "resource_id", "third_resource_id", "category_id", "intensifies_path",
+        "formula_id", "team_id", "local_material_id", "tone_speaker", "mock_tone_speaker",
+        "tone_effect_id", "tone_effect_name", "tone_platform", "cloned_model_type",
+        "tone_category_id", "tone_category_name", "tone_second_category_id",
+        "tone_second_category_name", "tone_emotion_name_key", "tone_emotion_style",
+        "tone_emotion_role", "tone_emotion_selection", "moyin_emotion", "request_id",
+        "query", "search_id", "sound_separate_type", "source_from", "aigc_history_id",
+        "aigc_item_id", "music_source", "pgc_id", "pgc_name", "ai_music_enter_from",
+        "tts_task_id", "tts_generate_scene"), "")
+    return {**blank, "id": mid, "type": "extract_music", "name": Path(path).name,
+            "path": str(path), "duration": dur_us, "wave_points": [], "app_id": 0,
+            "source_platform": 0, "check_flag": 1, "tone_emotion_scale": 0.0,
+            "is_text_edit_overdub": False, "is_ugc": False, "is_ai_clone_tone": False,
+            "is_ai_clone_tone_post": False, "copyright_limit_type": "none",
+            "similiar_music_info": {"original_song_id": "", "original_song_name": ""},
+            "ai_music_type": 0, "lyric_type": 0, "ai_music_generate_scene": 0,
+            "tts_benefit_info": {"benefit_type": "none", "benefit_log_id": "",
+                                 "benefit_log_extra": "", "benefit_amount": -1}}
+
+
+def add_audio(name, media, at=0.0, force=False):
+    """Put an audio file (voiceover, music) on its own audio track."""
+    def mutate(d, folder):
+        if not force and any(a.get("name") == Path(media).name for a in d["materials"]["audios"]):
+            sys.exit(f"{Path(media).name} is already in the draft — pass --force to add a second copy")
+        path = local_media(folder, media)
+        dur_us = int(float(subprocess.check_output(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "csv=p=0", str(path)])) * 1e6)
+        mid = uid()
+        d["materials"]["audios"].append(audio_material(mid, path, dur_us))
+        extras = segment_extras(d["materials"])
+        refs = [extras[i] for i in (0, 1, 3, 5)]  # audio skips the canvas/color refs, as CapCut does
+        bid = uid()
+        d["materials"]["beats"].append({
+            "id": bid, "type": "beats", "enable_ai_beats": False, "gear": 404,
+            "gear_count": 0, "mode": 404, "user_beats": [], "user_delete_ai_beats": None,
+            "ai_beats": {"melody_url": "", "melody_path": "", "beats_url": "", "beats_path": "",
+                         "melody_percents": [0.0], "beat_speed_infos": []}})
+        seg = segment(mid, 0, dur_us, round(at * 1e6), refs + [bid])
+        seg.update({"clip": None, "uniform_scale": None, "hdr_settings": None,
+                    "enable_lut": False, "enable_adjust": False, "track_render_index": 0})
+        track = next((t for t in d["tracks"] if t["type"] == "audio"), None)
+        if track is None:
+            track = {"id": uid(), "type": "audio", "segments": [], "flag": 0,
+                     "attribute": 0, "name": "", "is_default_name": True}
+            d["tracks"].append(track)
+        track["segments"].append(seg)
+    edit_draft(name, mutate)
+    print(f"audio: {Path(media).name} at {at:.2f}s")
 
 
 def add_text(name, text, at, duration=3.0, level=1, force=False,
@@ -1231,6 +1293,8 @@ def main():
                     opt(rest, "--layer", int, 1), opt(rest, "--dur", float),
                     force="--force" in rest, src=opt(rest, "--src", float, 0.0),
                     render_index=opt(rest, "--ri", int), mute="--mute" in rest)
+    elif cmd == "add-audio":
+        add_audio(rest[0], rest[1], opt(rest, "--at", float, 0.0), force="--force" in rest)
     elif cmd == "add-text":
         add_text(rest[0], rest[1], opt(rest, "--at", float, 0.0),
                  opt(rest, "--dur", float, 3.0), force="--force" in rest,

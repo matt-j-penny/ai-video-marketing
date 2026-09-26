@@ -37,6 +37,7 @@ File lane (quits + relaunches the app around the write):
 replay <job> [--name <draft>]            # EDL -> new draft, one clip per cut
 add-overlay <draft> <mov> --at <s> [--layer N] [--dur <s>] [--src <s>] [--ri N] [--mute] [--force]
 add-text <draft> "<text>" --at <s> [--dur <s>] [--ri N] [--force]
+add-audio <draft> <audio> [--at <s>] [--force]   # own audio track (voiceover, music)
 graphics <draft> <job>                   # place a job's whole graphics plan
 transform <draft> [--track main|text|overlay] [--index N] [--scale S] [--x X] [--y Y] [--rotate R] [--opacity O]
 remove <draft> [--track main|text|overlay] [--index N]
