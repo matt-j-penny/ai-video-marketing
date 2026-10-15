@@ -1,0 +1,3 @@
+interface:
+  display_name: "YouTube Editing Style"
+  short_description: "Analyze a video with Gemini and produce an editing guide"
