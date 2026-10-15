@@ -38,6 +38,7 @@ Each template says when it should be used. The edit planner matches transcript m
   "useWhen": ["list", "comparison"],
   "describe": "The speaker names 2–3 options one after another; each chip pops in as it is said.",
   "limits": "3 tags, ≤ 3 words each",
+  "speaker": "behind",
   "avoidWhen": "items are full sentences or more than 3"
 }
 ```
@@ -47,6 +48,7 @@ Each template says when it should be used. The edit planner matches transcript m
 - `limits`: its capacity, as item counts, words per line and required photos.
 - `avoidWhen` (optional): when a different graphic would be better.
 - `mediaMode`: `overlay` (it sits on the footage) or `standalone` (it covers the picture). `duration` is the template's length.
+- `speaker`: where the source's talking head was. `behind` means the graphic sat over the speaker. `slot` means the design holds the speaker, such as a picture-in-picture or split screen. `none` means no speaker was visible. See rule 8.
 
 ## Rules (`$T check` enforces them)
 
@@ -71,6 +73,15 @@ Each template says when it should be used. The edit planner matches transcript m
    - Hidden starting states go in CSS (`opacity: 0`) or inline on spans you create. Never use `tl.set(..., 0)`, because frame 0 ignores it.
    - Keep everything deterministic: no `Math.random`, no `Date`, no fetches.
 7. **Length.** The root `data-duration` equals the timeline length, including the exit. An edit can make a slot longer; the last frame then holds, so an exited graphic just stays gone.
+
+8. **Speaker placeholder.** If the source showed a talking head, the template shows the shared placeholder in its place, never an empty area or a photo SVG. These are the same files and paths every library template uses. `$T standalone` copies them into `assets/`, and `lib-add` keeps them at these exact paths, which the Edit Pipeline swaps for real footage.
+   - `speaker: "behind"`: the first child of the root is
+     `<img class="preview-talking-head" data-preview-only src="assets/talking-head-placeholder.png" alt="" />`, with
+     `#__COMP__-root .preview-talking-head { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }`.
+     It is preview-only: renders and edit instances drop it, so the template stays a transparent overlay.
+   - `speaker: "slot"`: the slot holds
+     `<video class="clip" src="assets/placeholder-video.mp4" poster="assets/talking-head-placeholder.png" muted playsinline preload="auto" data-start="0" data-duration="<s>" data-track-index="0"></video>`, styled `object-fit: cover`.
+     Wrap it in `<div id="__COMP__-<slot>">` and reference that `#id` in the timeline, for example in its entrance tween. A slot nothing animates is hidden by the Edit Pipeline as preview scaffolding. Do not add an audio track; the host plays the footage audio. Do not expose the slot as a variable: edit instances drop the video and the edit places the real footage over the slot.
 
 ## Skeleton
 

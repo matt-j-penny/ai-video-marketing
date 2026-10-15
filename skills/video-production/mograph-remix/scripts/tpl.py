@@ -43,7 +43,11 @@ MOMENTS = {
     "callout": "naming a person, product, tool, place or source",
     "cta": "subscribe, link, download or next step",
 }
-CARD_KEYS = ("kind", "mediaMode", "duration", "useWhen", "describe", "limits")
+CARD_KEYS = ("kind", "mediaMode", "duration", "useWhen", "describe", "limits", "speaker")
+PLACEHOLDERS = HERE / "assets" / "placeholders"
+THUMB, VID = "assets/talking-head-placeholder.png", "assets/placeholder-video.mp4"
+PREVIEW_IMG = re.compile(r"\s*<img\b[^>]*\bdata-preview-only\b[^>]*/?>")
+SLOT_VIDEO = re.compile(r'\s*<video\b[^>]*\bsrc="' + VID + r'"[^>]*>\s*</video>')
 
 STANDALONE_CSS = (
     "<style>html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; "
@@ -136,11 +140,28 @@ def check_card(card):
     errs = [f"template.json needs {k}" for k in CARD_KEYS if k not in card]
     if card.get("mediaMode") not in ("overlay", "standalone"):
         errs.append('template.json mediaMode must be "overlay" or "standalone"')
+    if card.get("speaker") not in ("none", "behind", "slot"):
+        errs.append('template.json speaker must be "none", "behind" or "slot"')
     use = card.get("useWhen", [])
     if not 1 <= len(use) <= 3:
         errs.append("template.json useWhen needs 1–3 moments, best first")
     errs += [f'useWhen "{m}" is not a moment (see `tpl.py moments`)' for m in use if m not in MOMENTS]
     return errs
+
+
+def check_speaker(src, card):
+    sp = (card or {}).get("speaker")
+    if sp == "behind" and not re.search(r'<img\b[^>]*\bdata-preview-only\b[^>]*src="' + THUMB + '"', src):
+        return [f'speaker "behind": add <img class="preview-talking-head" data-preview-only src="{THUMB}" alt="" /> as the root\'s first child']
+    if sp == "slot":
+        m = SLOT_VIDEO.search(src)
+        if not m or f'poster="{THUMB}"' not in m.group(0) or "muted" not in m.group(0):
+            return [f'speaker "slot": the slot needs <video class="clip" src="{VID}" poster="{THUMB}" muted playsinline ...></video>']
+        wrap = re.search(r'<div\b[^>]*\bid="([^"]+)"[^>]*>\s*$', src[:m.start() + len(m.group(0)) - len(m.group(0).lstrip())])
+        script = "".join(re.findall(r"<script>(.*?)</script>", src, re.S))
+        if not wrap or f"#{wrap.group(1)}" not in script:
+            return ["speaker slot: wrap the video in a div with an id and reference that #id in the timeline, or the Edit Pipeline hides it as preview scaffolding"]
+    return []
 
 
 def cmd_moments(a):
@@ -159,7 +180,8 @@ def cmd_catalog(a):
 
 
 def cmd_check(a):
-    errs = check(read_tpl(a.template)) + check_card(read_card(a.template))
+    src, card = read_tpl(a.template), read_card(a.template)
+    errs = check(src) + check_card(card) + check_speaker(src, card)
     print("\n".join(errs) if errs else "ok")
     sys.exit(1 if errs else 0)
 
@@ -169,6 +191,10 @@ def cmd_standalone(a):
     errs = check(src)
     if errs:
         die("template contract:\n  " + "\n  ".join(errs))
+    for f in (THUMB, VID):
+        if f in src and not (Path(a.template) / f).exists():
+            (Path(a.template) / "assets").mkdir(exist_ok=True)
+            shutil.copy(PLACEHOLDERS / Path(f).name, Path(a.template) / f)
     (Path(a.template) / "index.html").write_text(standalone_html(src))
     print(Path(a.template) / "index.html")
 
@@ -192,6 +218,7 @@ def cmd_instance(a):
             d["default"] = values[d["id"]]
     inst = a.inst_id
     body = re.sub(r"<script src=[^>]*></script>", "", body)
+    body = SLOT_VIDEO.sub("", PREVIEW_IMG.sub("", body))  # the edit's own footage replaces the speaker placeholder
     out = (
         "<!doctype html>\n"
         f"<html data-composition-variables='{json.dumps(decl).replace(chr(39), '&#39;')}'>\n"
@@ -376,11 +403,17 @@ def cmd_lib_add(a):
     html = standalone_html(read_tpl(tdir))
     html = html.replace('"assets/', f'"assets/{tid}/').replace("&quot;assets/", f"&quot;assets/{tid}/")
     html = html.replace('url("fonts/', 'url("assets/fonts/')
+    for f in (THUMB, VID):  # shared library placeholders, at the paths the Edit Pipeline swaps for footage
+        html = html.replace(f.replace("assets/", f"assets/{tid}/"), f)
     html = re.sub(r"(<script src=\"https://cdn\.jsdelivr\.net/npm/gsap)", SHIM + r"\n    \1", html, count=1)
     html = html.replace("</body>", AUTOPLAY + "\n</body>", 1)
     (tpl_dir / f"{tid}.html").write_text(html)
     merge_dir(tdir / "assets", tpl_dir / "assets" / tid)
     merge_dir(tdir / "fonts", tpl_dir / "assets" / "fonts")
+    for f in (THUMB, VID):
+        (tpl_dir / "assets" / tid / Path(f).name).unlink(missing_ok=True)
+        if f in html and not (tpl_dir / f).exists():
+            shutil.copy(PLACEHOLDERS / Path(f).name, tpl_dir / f)
 
     entry = {"id": tid, "category": "mg", "features": [], **meta, "path": f"Assets/templates/{tid}.html"}
     body = ",\n".join(f"    {k}: {json.dumps(v)}" for k, v in entry.items())

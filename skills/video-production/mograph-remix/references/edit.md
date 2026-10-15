@@ -84,7 +84,7 @@ Then write `RUN/edit/index.html`:
 ```
 
 - **Full-screen graphics** cover the picture while the footage audio keeps playing underneath. That's intended.
-- **Speaker picture-in-picture**: when a full-screen template has a speaker slot, place a muted, trimmed copy of the footage over that slot at the host level, and match the slot's rect and radius:
+- **Speaker picture-in-picture**: when a full-screen template has a speaker slot (`"speaker": "slot"` in its template.json; the instance has already dropped the placeholder video), place a muted, trimmed copy of the footage over that slot at the host level, and match the slot's rect and radius:
   ```html
   <video id="g03-pip" class="clip" src="assets/footage.mp4" muted playsinline
          data-start="<s>" data-media-start="<s>" data-duration="<d>" data-track-index="2"

@@ -67,7 +67,7 @@ ffmpeg -v error -y -ss <t> -i RUN/source.mp4 -frames:v 1 /tmp/f.png
 
 Write `segments/<id>/analysis.md` with these sections:
 
-- **What it is**: the category and its purpose. Say whether it is an overlay or full-screen.
+- **What it is**: the category and its purpose. Say whether it is an overlay or full-screen, and where the speaker is: behind it, inside it (a picture-in-picture or split screen, with its rect), or not visible.
 - **Layout**: each element's position and size in px on a 1920×1080 frame, plus safe areas.
 - **Style**: palette as hex, fonts (closest Google Font plus weight and size), radius, strokes, shadows, blur and texture.
 - **Motion timeline**: one row per element, giving its start offset, property, from and to values, duration, ease feel and stagger. Get these from the frame-to-frame differences.
@@ -83,6 +83,7 @@ Write it to `references/template-contract.md`:
 - Recreate it faithfully from `analysis.md` and the dense sheets.
 - Use the source content as the defaults.
 - Use placeholder SVGs for photos, logos and icons, written to `assets/`.
+- Never leave out the speaker. Wherever the source showed the talking head, use the shared speaker placeholder from rule 8 of the contract. Set `speaker` in `template.json` to match.
 
 Write its `template.json` moment card. Base `useWhen` on what the speaker was *saying* when the graphic appeared in the source (to know that, transcribe the source once with `$TR RUN/source.mp4 RUN` and read `RUN/transcript.md` around the segment's timecode), and generalise it to the kind of moment it suits.
 
