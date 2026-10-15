@@ -25,7 +25,7 @@ RUN   = ./mograph-remix/<source-video-id>/      (in the current working director
 
 ## 0. Setup gate
 
-Read `CFG`. If it does not exist, or the user asks to change setup, follow `references/setup.md` before doing anything else. That step checks the tools and asks where templates should be saved. If `CFG` exists, check that a configured library still passes `$T lib-check <path>`. If it fails, tell the user and re-run setup.
+Read `CFG`. If it does not exist, or the user asks to change setup, follow `references/setup.md` before doing anything else. That step checks the tools and finds the template library, asking only if it cannot tell which one to use. If `CFG` exists and `library.mode` is `library`, run `$T lib-check`. If it fails, or the config has the old `library.path` shape, tell the user why and re-run setup's library steps (3–5).
 
 ## 1. Work out the job
 
@@ -60,7 +60,7 @@ Follow `references/extract.md`. It produces:
 2. Save the templates according to `CFG.library.mode`:
    - **`library`**: for each template, run:
      ```bash
-     $T lib-add <CFG.library.path> RUN/templates/<name> --meta '<json>'
+     $T lib-add RUN/templates/<name> --meta '<json>'
      ```
      Fill the meta as follows:
      - `id`: `<name>-<source-video-id>`
@@ -70,7 +70,9 @@ Follow `references/extract.md`. It produces:
 
      The duration, overlay or standalone mode, and when-to-use come from the template's `template.json`.
 
-     Running it again with the same id replaces the old entry.
+     Running it again with the same id replaces the old entry. `lib-add` refuses to save if `lib-check` would fail. It writes the template to `CFG.library.templates`, adds the entry to every gallery in `CFG.library.galleries`, and updates `templates.json` when it exists.
+
+     After the last `lib-add`, verify the save. For each gallery with a `url`, open it in the browser and use `find` to confirm every new template name is on the page. Scroll to one card and screenshot it to check that the preview plays. If a name is missing, fix it before telling the user the templates are saved.
    - **`session`**: leave the templates in `RUN/templates/` and save nothing else.
 
 For an **extract** job, finish here and go to section 5.
@@ -88,7 +90,7 @@ Write `RUN/INDEX.md`. It lists:
 
 Tell the user, in at most four lines:
 - how many graphics were found
-- where the templates went: library path, or "this session only"
+- where the templates went: the templates folder and each gallery (with its URL), or "this session only"
 - for a remix, how to preview the edit (`cd RUN/edit && npx hyperframes preview`)
 - what is left to do, such as placeholder photos to swap in.
 

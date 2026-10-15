@@ -9,14 +9,16 @@ the __COMP__ placeholder; see references/template-contract.md) plus fonts/ and a
   standalone <template_dir>                          write <template_dir>/index.html (preview/check/snapshot)
   instance   <template_dir> <project> <inst_id> [--values JSON]
                                                      write <project>/compositions/<inst_id>.html for an edit
+  lib-find                                           list template folders, the galleries that show them, served URLs
   lib-init   <library_dir>                           create a new, empty template library
-  lib-check  <library_dir>                           confirm a folder is a compatible library
-  lib-add    <library_dir> <template_dir> --meta '{"id","name","desc","features"?}'
-                                                     add/replace the template in the library
+  lib-check  [--config CFG]                          prove every configured gallery will show saved templates
+  lib-add    <template_dir> --meta '{"id","name","desc","features"?}' [--config CFG]
+                                                     add/replace the template in every gallery + templates.json
 """
 import argparse
 import html as htmllib
 import json
+import os
 import re
 import shutil
 import sys
@@ -24,7 +26,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 STARTER = HERE / "assets" / "library-starter.html"
-ANCHOR = "const TEMPLATES = [\n"
 
 MOMENTS = {
     "hook": "the opening line or title of the video or a chapter",
@@ -204,18 +205,135 @@ def cmd_instance(a):
     print(proj / "compositions" / f"{inst}.html")
 
 
-def lib_html(lib):
-    p = Path(lib) / "template-library.html"
+CFG = Path.home() / ".config" / "mograph-remix" / "config.json"
+ANCHOR_RE = re.compile(r"(?:const|let|var) TEMPLATES = \[\n")
+
+
+def gallery_block(s):
+    m = ANCHOR_RE.search(s)
+    if not m:
+        return None, ""
+    return m, s[m.end():s.index("\n];", m.end())]
+
+
+def entry_files(block):
+    return [Path(p).name for p in re.findall(r"path:\s*['\"]Assets/templates/([^'\"]+)['\"]", block)]
+
+
+def fetch(url):
+    from urllib.request import urlopen
+    try:
+        with urlopen(url, timeout=3) as r:
+            return r.read()
+    except Exception:
+        return None
+
+
+def load_lib(cfg_path):
+    p = Path(cfg_path).expanduser()
     if not p.exists():
-        die(f"{p} not found — not a template library")
-    s = p.read_text()
-    if ANCHOR not in s:
-        die("template-library.html has no `const TEMPLATES = [` list — unsupported library format")
-    return p, s
+        die(f"{p} not found — run setup")
+    lib = json.loads(p.read_text()).get("library", {})
+    if lib.get("mode") != "library":
+        die("library mode is not 'library' — templates stay in the run folder")
+    if "templates" not in lib or not lib.get("galleries"):
+        die("config library needs `templates` and `galleries` — re-run setup")
+    return Path(lib["templates"]).expanduser().resolve(), lib["galleries"]
+
+
+def verify(tpl_dir, galleries):
+    """Errors and warnings proving each gallery will show templates written to tpl_dir."""
+    errs, warns = [], []
+    if not tpl_dir.is_dir():
+        return [f"templates folder {tpl_dir} does not exist"], warns
+    if not os.access(tpl_dir, os.W_OK):
+        errs.append(f"templates folder {tpl_dir} is not writable")
+    tj = tpl_dir / "templates.json"
+    if tj.exists():
+        try:
+            d = json.loads(tj.read_text())
+            if not any(isinstance(d.get(k), list) for k in ("mg-templates", "templates")):
+                errs.append(f"{tj} has no `mg-templates` or `templates` list")
+        except json.JSONDecodeError as e:
+            errs.append(f"{tj} is not valid JSON: {e}")
+    for g in galleries:
+        f = Path(g["file"]).expanduser()
+        if not f.exists():
+            errs.append(f"{f}: not found")
+            continue
+        src = f.read_text()
+        m, block = gallery_block(src)
+        if not m:
+            errs.append(f"{f}: no `TEMPLATES = [` list — unsupported gallery format")
+            continue
+        names = entry_files(block)
+        local = (f.parent / "Assets" / "templates").resolve() == tpl_dir
+        url = g.get("url")
+        if not local and not url:
+            errs.append(f"{f}: does not sit beside {tpl_dir} and has no url — it cannot load these templates")
+        missing = [n for n in names if not (tpl_dir / n).exists()]
+        if names and len(missing) * 2 > len(names):
+            errs.append(f"{f}: {len(missing)}/{len(names)} of its entries are not in {tpl_dir} — it reads a different folder")
+        if url:
+            served = fetch(url)
+            if served is None:
+                warns.append(f"{url}: not reachable now (server down?) — saves still go to {f}")
+            elif served != f.read_bytes():
+                errs.append(f"{url} serves a different file than {f}")
+        print(f"gallery {f}{' @ ' + url if url else ''}: {len(names)} entries")
+    return errs, warns
+
+
+def report(errs, warns):
+    for w in warns:
+        print(f"warning: {w}")
+    if errs:
+        die("library check failed:\n  " + "\n  ".join(errs))
+
+
+def cmd_lib_find(a):
+    import subprocess
+    found = subprocess.run(
+        ["find", str(Path.home()), "-maxdepth", "7", "-name", "template-library.html",
+         "-not", "-path", "*/node_modules/*", "-not", "-path", "*/Library/*", "-not", "-path", "*/.Trash/*"],
+        capture_output=True, text=True).stdout.split("\n")
+    galleries = [Path(x) for x in found if x]
+    dirs = {(g.parent / "Assets" / "templates").resolve() for g in galleries if (g.parent / "Assets" / "templates").is_dir()}
+    ports = subprocess.run(["lsof", "-nP", "-iTCP", "-sTCP:LISTEN"], capture_output=True, text=True).stdout
+    ports = sorted({int(x) for x in re.findall(r"(?:127\.0\.0\.1|localhost|\*|\[::1\]):(\d+) \(LISTEN\)", ports)})
+    served = {}
+    for port in ports:
+        url = f"http://localhost:{port}/template-library.html"
+        body = fetch(url)
+        if body:
+            served[body] = url
+    groups = {}
+    for g in galleries:
+        names = entry_files(gallery_block(g.read_text())[1])
+        sib = (g.parent / "Assets" / "templates").resolve()
+        best = sib if sib in dirs else max(dirs, key=lambda d: sum((d / n).exists() for n in names), default=None)
+        entry = {"file": str(g), "url": served.get(g.read_bytes())}
+        groups.setdefault(str(best), []).append((entry, len(names), g.stat().st_mtime))
+    import time
+    groups = {d: gs for d, gs in groups.items() if d != "None"}
+    if not groups:
+        print("no template library found")
+        return
+    # ponytail: a library served by a running app wins; several unserved ones are ambiguous, so ask
+    rank = lambda gs: (any(e["url"] for e, _, _ in gs), max(mt for _, _, mt in gs))
+    best = max(groups, key=lambda d: rank(groups[d]))
+    tie = sum(rank(gs)[0] == rank(groups[best])[0] for gs in groups.values()) > 1 and not rank(groups[best])[0]
+    for d, gs in groups.items():
+        print(f"\ntemplates folder: {d}")
+        for e, n, mt in gs:
+            print(f"  gallery {e['file']}  ({n} entries, edited {time.strftime('%Y-%m-%d', time.localtime(mt))})"
+                  + (f"  served at {e['url']}" if e["url"] else ""))
+        print("  config: " + json.dumps({"mode": "library", "templates": d, "galleries": [e for e, _, _ in gs]}))
+    print(f"\n{'ambiguous' if tie else 'recommended'}: {best}")
 
 
 def cmd_lib_init(a):
-    lib = Path(a.library).expanduser()
+    lib = Path(a.library).expanduser().resolve()
     if (lib / "template-library.html").exists():
         die(f"{lib} already has a template library — connect to it instead")
     for d in ("Assets/templates/assets/fonts", "Assets/templates/assets/sfx"):
@@ -228,19 +346,20 @@ def cmd_lib_init(a):
         "- `Assets/templates/<id>.html` — one self-contained HyperFrames template per file\n"
         "- `Assets/templates/assets/` — fonts, images and sound effects the templates use\n"
     )
-    print(lib)
+    print("config: " + json.dumps({"mode": "library", "templates": str(lib / "Assets" / "templates"),
+                                   "galleries": [{"file": str(lib / "template-library.html"), "url": None}]}))
 
 
 def cmd_lib_check(a):
-    p, s = lib_html(Path(a.library).expanduser())
-    block = s.split(ANCHOR, 1)[1].split("\n];", 1)[0]
-    n = len(re.findall(r"^    id: ", block, re.M))
-    print(f"ok — {p} ({n} templates)")
+    tpl_dir, galleries = load_lib(a.config)
+    report(*verify(tpl_dir, galleries))
+    print(f"ok — templates go to {tpl_dir}, listed in {len(galleries)} gallery file(s)")
 
 
 def cmd_lib_add(a):
-    lib = Path(a.library).expanduser()
-    p, s = lib_html(lib)
+    tpl_dir, galleries = load_lib(a.config)
+    errs, _ = verify(tpl_dir, galleries)
+    report(errs, [])
     tdir = Path(a.template)
     meta = json.loads(a.meta)
     for k in ("id", "name", "desc"):
@@ -254,7 +373,6 @@ def cmd_lib_add(a):
     meta = {"duration": card["duration"], "mediaMode": card["mediaMode"], **meta,
             "useWhen": card["useWhen"], "limits": card["limits"]}
     tid = meta["id"]
-    tpl_dir = lib / "Assets" / "templates"
     html = standalone_html(read_tpl(tdir))
     html = html.replace('"assets/', f'"assets/{tid}/').replace("&quot;assets/", f"&quot;assets/{tid}/")
     html = html.replace('url("fonts/', 'url("assets/fonts/')
@@ -267,10 +385,25 @@ def cmd_lib_add(a):
     entry = {"id": tid, "category": "mg", "features": [], **meta, "path": f"Assets/templates/{tid}.html"}
     body = ",\n".join(f"    {k}: {json.dumps(v)}" for k, v in entry.items())
     block = f"  {{ // mograph-remix\n{body},\n  }},\n"
-    s = re.sub(r"  \{ // mograph-remix\n    id: " + re.escape(json.dumps(tid)) + r",.*?\n  \},\n", "", s, flags=re.S)
-    s = s.replace(ANCHOR, ANCHOR + block, 1)
-    p.write_text(s)
-    print(f"added {tid} -> {tpl_dir / (tid + '.html')}")
+    for g in galleries:
+        f = Path(g["file"]).expanduser()
+        s = re.sub(r"  \{ // mograph-remix\n    id: " + re.escape(json.dumps(tid)) + r",.*?\n  \},\n", "", f.read_text(), flags=re.S)
+        m, _ = gallery_block(s)
+        f.write_text(s[:m.end()] + block + s[m.end():])
+
+    tj = tpl_dir / "templates.json"
+    if tj.exists():
+        d = json.loads(tj.read_text())
+        key = "mg-templates" if isinstance(d.get("mg-templates"), list) else "templates"
+        d[key] = [t for t in d[key] if t.get("id") != tid] + [{
+            "id": tid, "name": meta["name"], "path": f"templates/{tid}.html", "description": meta["desc"],
+            "bestFor": card["useWhen"], "avoidWhen": [x for x in (card.get("avoidWhen"), card["limits"]) if x],
+            "features": meta.get("features", []),
+            "technical": {"framework": "HyperFrames", "width": 1920, "height": 1080,
+                          "mediaMode": card["mediaMode"], "defaultDuration": card["duration"]},
+        }]
+        tj.write_text(json.dumps(d, indent=2, ensure_ascii=False))
+    print(f"added {tid} -> {tpl_dir / (tid + '.html')} (+ {len(galleries)} gallery, templates.json: {tj.exists()})")
 
 
 ap = argparse.ArgumentParser()
@@ -282,8 +415,9 @@ c = sub.add_parser("standalone"); c.add_argument("template"); c.set_defaults(fn=
 c = sub.add_parser("instance"); c.add_argument("template"); c.add_argument("project"); c.add_argument("inst_id")
 c.add_argument("--values"); c.set_defaults(fn=cmd_instance)
 c = sub.add_parser("lib-init"); c.add_argument("library"); c.set_defaults(fn=cmd_lib_init)
-c = sub.add_parser("lib-check"); c.add_argument("library"); c.set_defaults(fn=cmd_lib_check)
-c = sub.add_parser("lib-add"); c.add_argument("library"); c.add_argument("template")
+c = sub.add_parser("lib-find"); c.set_defaults(fn=cmd_lib_find)
+c = sub.add_parser("lib-check"); c.add_argument("--config", default=CFG); c.set_defaults(fn=cmd_lib_check)
+c = sub.add_parser("lib-add"); c.add_argument("template"); c.add_argument("--config", default=CFG)
 c.add_argument("--meta", required=True); c.set_defaults(fn=cmd_lib_add)
 a = ap.parse_args()
 a.fn(a)

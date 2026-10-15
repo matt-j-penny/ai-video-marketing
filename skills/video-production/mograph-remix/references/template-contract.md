@@ -121,5 +121,5 @@ Read `snapshots/contact-sheet.jpg` and compare it against the reference frames. 
 | Command | Effect |
 |---|---|
 | `$T instance templates/<name> <project> <inst> --values '{"headline":"New text"}'` | Writes `<project>/compositions/<inst>.html` (a sub-composition with `__COMP__` → `<inst>` and the values baked in), and merges `fonts/` and `assets/` into the project. |
-| `$T lib-add <library> templates/<name> --meta '{"id","name","desc","features"}'` | Writes a self-playing copy to `<library>/Assets/templates/<id>.html` and adds or replaces its library entry. `duration`, `mediaMode`, `useWhen` and `limits` come from `template.json`, and "Use when: …" is appended to the description. |
+| `$T lib-add templates/<name> --meta '{"id","name","desc","features"}'` | Checks the configured library, writes a self-playing copy to `<templates folder>/<id>.html`, and adds or replaces its entry in every configured gallery and in `templates.json`. `duration`, `mediaMode`, `useWhen` and `limits` come from `template.json`, and "Use when: …" is appended to the description. |
 | `$T catalog <templates_dir>` | Prints every template's moment card and variables, as input for edit planning. |

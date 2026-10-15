@@ -3,7 +3,6 @@ description: Find the motion graphics in a YouTube video and recreate each one a
 argument-hint: <youtube-url> [your video path or URL]
 ---
 
-- Only a style URL given: run the `mograph-snatcher` skill (`skills/video-production/mograph-snatcher/SKILL.md`).
-- A style URL plus the user's own video: run the `mograph-remix` skill (`skills/video-production/mograph-remix/SKILL.md`), which takes the style from the URL and applies it to the video.
+Run the `mograph-remix` skill (`skills/video-production/mograph-remix/SKILL.md`). It handles both jobs: a style URL alone (extract and save templates), or a style URL plus the user's own video (also edit that video in the style). Its setup gate finds and verifies the template library before anything is saved.
 
 $ARGUMENTS
