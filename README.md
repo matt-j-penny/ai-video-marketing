@@ -23,6 +23,7 @@ Skills are markdown files that give AI agents specialized knowledge and workflow
 | [video-production/mograph-remix](skills/video-production/mograph-remix/) | YouTube URL to reusable HyperFrames motion-graphics templates (`/mograph-remix`): scans the video for graphics, recreates each one with editable variables and a "use when" moment card (list, emphasis, steps, stat…), writes a style guide, and saves them to a HyperFrames template library. Give it your own video too and it edits it with graphics in the same style, even on a different topic. First-time setup connects an existing library, creates a new one, or keeps templates for the session only. |
 | [video-production/mograph-snatcher](skills/video-production/mograph-snatcher/) | YouTube URL to HyperFrames templates (`/style-clone`): scans the video for motion graphics, captures dense frames of each one, writes a layout/style/motion-timing analysis, and rebuilds every graphic as a verified template with editable variables. Add your own video (`/style-clone <url> <your-video>`) and it hands off to mograph-remix to edit your video in that style. Needs the HyperFrames skills (`npx skills add heygen-com/hyperframes`). |
 | [video-production/storyboard](skills/video-production/storyboard/) | Explicit-only (`/storyboard`): turn a script or video into a finished motion-graphics video end to end — storyboard, HTML/React scenes, a Remotion composition synced to the voice-over, and a final render saved to `~/Downloads`. |
+| [video-production/video-tool-finder](skills/video-production/video-tool-finder/) | Pick the right stack before building a video: a researched catalog of ~58 open-source tools, libraries and agent skills (editing, motion graphics, Claude video style packs, voice/captions, 3D) with what each does best, when to use it, license flags, and a quick pick-by-job table. |
 | [video-analysis/transcribe-url](skills/video-analysis/transcribe-url/) | Transcribe any public video URL (YouTube, Instagram, TikTok, X, and more) with yt-dlp and local faster-whisper into a markdown transcript. |
 | [video-analysis/youtube-editing-style](skills/video-analysis/youtube-editing-style/) | Break down a YouTube URL or local video's editing style: sends the actual video with audio to Gemini 3.8 Flash via OpenRouter and writes a timestamped guide to cuts, pacing, graphics, captions, fonts, colour, animation, B-roll and layouts, with reusable recipes for recreating the style. |
 | [content-research/ig-competitor-research](skills/content-research/ig-competitor-research/) | Rank tracked Instagram competitors' last-week posts by likes and breakout score, transcribe and break down the winners, and build a visual HTML report (Apify MCP). |
@@ -107,6 +108,9 @@ Once installed, just ask your agent to help with video editing tasks:
 "/storyboard turn this clip into a finished video with motion graphics"
 → Uses video-production/storyboard skill
 
+"What's the best tool to make a pixel-art intro with a voiceover?"
+→ Uses video-production/video-tool-finder skill
+
 "Research my Instagram competitors"
 → Uses content-research/ig-competitor-research skill
 
@@ -126,6 +130,7 @@ You can also invoke a skill directly:
 /create-design-md
 /create-frames-md
 /storyboard
+/video-tool-finder
 /transcribe-url
 /ig-competitor-research
 /yt-competitor-research
