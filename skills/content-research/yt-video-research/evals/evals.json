@@ -1,0 +1,29 @@
+{
+  "skill_name": "yt-video-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to make a video about Claude + Blender. Find what's done well in the last month and break it down.",
+      "expected_output": "Runs 2-3 vidiq_outliers searches plus a viewCount vidiq_youtube_search in parallel for the last month, shows a ranked shortlist, analyses titles across it, spawns 3 parallel subagents to pull transcripts and break down 6-9 picks with the template, fetches comments with fetch-comments.py (YouTube API if YOUTUBE_API_KEY is set, else yt-dlp), reverse-engineers what viewers want, presents the synthesis and stops for the user.",
+      "assertions": [
+        "Uses vidIQ for search and transcripts, not for comments",
+        "Transcripts are read by subagents, not the main thread",
+        "Includes a 'what viewers want' analysis backed by evidence, not a fixed category list",
+        "Stops after the synthesis instead of jumping to angles",
+        "Reports vidIQ credits used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Angle 1 is the one. Here's my intro draft: <draft>. Tighten it.",
+      "expected_output": "Uses youtube-intro if available (else hook-generator), keeps the user's wording, flags any shaky claim once, and only saves to Content OS if it's connected.",
+      "assertions": [
+        "Keeps the user's own wording",
+        "Uses youtube-intro or falls back to hook-generator",
+        "Skips the Content OS save when Content OS isn't connected"
+      ],
+      "files": []
+    }
+  ]
+}
