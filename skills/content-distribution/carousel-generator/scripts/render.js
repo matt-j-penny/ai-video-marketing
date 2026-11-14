@@ -140,6 +140,51 @@ function writeCaption(manifest, outDir) {
   fs.writeFileSync(path.join(outDir, "caption.md"), md);
 }
 
+/* ---- video slides: play a source clip inside the slide (ffmpeg) ----------
+   slide.video = { start, duration, src?, crop?: "W:H:X:Y", speed?, audio?: {src, start} }
+   media       -> clip fills the .media__img box (rounded, cover-fit) over the rendered PNG
+   cover_image -> clip full-bleed under the scrim + text; the swipe arrow eases right and back */
+function renderVideoSlide(job, manifest, manifestDir, outDir) {
+  const { execFileSync } = require("child_process");
+  const v = job.v, rel = p => path.isAbsolute(p) ? p : path.resolve(manifestDir, p);
+  const src = rel(v.src || manifest.source_video || "");
+  if (!fs.existsSync(src)) { console.warn(`[carousel] slide ${job.nn}: video source not found ${src}`); return; }
+  const speed = v.speed || 1, dur = v.duration * speed;
+  const out = path.join(outDir, `slide_${job.nn}.mp4`);
+  const ff = a => execFileSync("ffmpeg", ["-nostdin", "-loglevel", "error", "-y", ...a]);
+  const crop = v.crop ? `crop=${v.crop},` : "";
+  const clipChain = (w, h) => `[1:v]${crop}setpts=${speed}*PTS,scale=${w}:${h}:force_original_aspect_ratio=increase,crop=${w}:${h},fps=30`;
+  const ins = [], extra = [];
+  let fc;
+  if (job.kind === "media") {
+    const { x, y } = job.rect, w = Math.round(job.rect.w / 2) * 2, h = Math.round(job.rect.h / 2) * 2, r = job.rect.r;
+    const mask = path.join(outDir, `.mask_${job.nn}.png`); extra.push(mask);
+    ff(["-f", "lavfi", "-i", `color=white:s=${w}x${h},format=gray`, "-frames:v", "1", "-vf",
+      `geq=lum='if(gt(abs(X-${w}/2+0.5),${w}/2-${r})*gt(abs(Y-${h}/2+0.5),${h}/2-${r}),if(lte(hypot(abs(X-${w}/2+0.5)-(${w}/2-${r}),abs(Y-${h}/2+0.5)-(${h}/2-${r})),${r}),255,0),255)'`, mask]);
+    ins.push("-loop", "1", "-i", job.base, "-ss", v.start, "-t", v.duration, "-i", src, "-loop", "1", "-i", mask);
+    fc = `[0:v]scale=${W}:${H}[b];${clipChain(w, h)}[c];[2:v]format=gray[m];[c][m]alphamerge[cm];[b][cm]overlay=${Math.round(x)}:${Math.round(y)}:shortest=1[v0]`;
+  } else {
+    extra.push(job.fg, job.arrow);
+    ins.push("-f", "lavfi", "-i", `color=black:s=${W}x${H}`, "-ss", v.start, "-t", v.duration, "-i", src, "-loop", "1", "-i", job.fg, "-loop", "1", "-i", job.arrow);
+    fc = `${clipChain(W, H)}[c];[0:v][c]overlay=0:0:shortest=1[b0];[2:v]scale=${W}:${H}[f];[b0][f]overlay[b1];`
+       + `[3:v]scale=${W}:${H}[a];[b1][a]overlay=x='9*(1-cos(2*PI*t))/2':y=0[v0]`;
+  }
+  fc += ";[v0]format=yuv420p[v]";
+  let maps = ["-map", "[v]", "-an"];
+  if (v.audio && v.audio.src) {
+    ins.push("-ss", v.audio.start || 0, "-t", dur, "-i", rel(v.audio.src));
+    const ai = job.kind === "media" ? 3 : 4;
+    fc += `;[${ai}:a]afade=t=out:st=${Math.max(0, dur - 0.4)}:d=0.4[a]`;
+    maps = ["-map", "[v]", "-map", "[a]", "-c:a", "aac", "-b:a", "160k"];
+  }
+  try {
+    ff([...ins.map(String), "-filter_complex", fc, ...maps, "-t", String(dur), "-c:v", "libx264", "-crf", "18", "-movflags", "+faststart", out]);
+    console.log(`[carousel] video slide -> ${out}`);
+  } catch (e) {
+    console.warn(`[carousel] slide ${job.nn}: ffmpeg failed (is ffmpeg installed?) ${e.stderr || e.message}`);
+  } finally { extra.forEach(f => fs.existsSync(f) && fs.unlinkSync(f)); }
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const manifestPath = args._[0];
@@ -181,7 +226,8 @@ async function main() {
   await page.evaluate(async (m) => { await document.fonts.ready; window.renderDeck(m); }, manifest);
   await page.waitForTimeout(120);
 
-  const files = [];
+  const files = [], videoJobs = [];
+  const clip = { x: 0, y: 0, width: W, height: H };
   for (let i = 0; i < nSlides; i++) {
     // isolate slide i at 0,0 so a clip screenshot is pixel-exact
     await page.evaluate((idx) => {
@@ -190,11 +236,39 @@ async function main() {
       document.querySelectorAll(".slide").forEach((s, j) => { s.style.display = j === idx ? "flex" : "none"; });
       window.scrollTo(0, 0);
     }, i);
-    const file = path.join(outDir, `slide_${String(i + 1).padStart(2, "0")}.png`);
-    await page.screenshot({ path: file, clip: { x: 0, y: 0, width: W, height: H } });
+    const nn = String(i + 1).padStart(2, "0");
+    const file = path.join(outDir, `slide_${nn}.png`);
+    await page.screenshot({ path: file, clip });
     files.push(file);
+
+    const s = manifest.slides[i];
+    if (!s || !s.video) continue;
+    if (s.type === "media") {
+      const rect = await page.evaluate(() => {
+        const el = document.querySelector('.slide:not([style*="display: none"]) .media__img');
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { x: r.x, y: r.y, w: r.width, h: r.height, r: parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0 };
+      });
+      if (rect) videoJobs.push({ kind: "media", nn, base: file, rect, v: s.video });
+      else console.warn(`[carousel] slide ${nn}: video needs an image box (set "image" to a frame of the clip)`);
+    } else if (s.type === "cover_image") {
+      // two transparent layers over a full-bleed clip: everything but the image, and the swipe arrow alone
+      const layer = async (name, css) => {
+        await page.addStyleTag({ content: css }).then(h => h.evaluate(e => e.id = "vidlayer"));
+        const p = path.join(outDir, `.${name}_${nn}.png`);
+        await page.screenshot({ path: p, clip, omitBackground: true });
+        await page.evaluate(() => document.getElementById("vidlayer").remove());
+        return p;
+      };
+      const clear = "html,body,.slide{background:transparent!important}.slide__bg,.slide__media{display:none!important}";
+      const fg = await layer("fg", clear + ".swipe .arrow{visibility:hidden}");
+      const arrow = await layer("arrow", clear + ".slide *{visibility:hidden}.swipe .arrow{visibility:visible}");
+      videoJobs.push({ kind: "cover", nn, fg, arrow, v: s.video });
+    } else console.warn(`[carousel] slide ${nn}: video is supported on cover_image and media slides only`);
   }
   console.log(`[carousel] rendered ${files.length} slides @ ${W * args.scale}x${H * args.scale} -> ${outDir}`);
+  for (const j of videoJobs) renderVideoSlide(j, manifest, manifestDir, outDir);
 
   // ---- contact sheet (all slides in one grid for quick review)
   const cols = Math.min(nSlides, 4);

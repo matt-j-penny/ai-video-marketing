@@ -1,9 +1,9 @@
 ---
 name: carousel-generator
-description: "Designs fire 4:5 (1080x1350) Instagram carousels with a HYBRID engine: an AI-generated cover (Higgsfield/Nano Banana Pro) for the thumb-stopping slide 1, then a token-locked HTML/CSS design system for the body slides. Claude writes the cover concept + slide copy in the creator's voice + a JSON manifest, you generate the cover, preview the real deck, then Playwright screenshots crisp 2x PNGs — plus a caption package with the offer CTA (from backbone/offer.md). Saveable template library for repeatable decks. No Canva. Triggers: make a carousel, instagram carousel, ig carousel, carousel generator, turn this into a carousel, slide deck for instagram, 4:5 slides, design a carousel, trend carousel, news carousel, post carousel."
+description: "Designs fire 4:5 (1080x1350) Instagram carousels with a HYBRID engine: an AI-generated cover (Higgsfield/Nano Banana Pro) for the thumb-stopping slide 1, then a token-locked HTML/CSS design system for the body slides. Claude writes the cover concept + slide copy in the creator's voice + a JSON manifest, you generate the cover, preview the real deck, then Playwright screenshots crisp 2x PNGs — plus a caption package with the offer CTA (from backbone/offer.md). Repurposing a video? Slides can become MP4 video slides that play the source clip (animated cover with a nudging swipe arrow). Saveable template library for repeatable decks. No Canva. Triggers: make a carousel, instagram carousel, ig carousel, carousel generator, turn this into a carousel, turn this video into a carousel, video carousel, slide deck for instagram, 4:5 slides, design a carousel, trend carousel, news carousel, post carousel."
 metadata:
-  version: 1.0.0
-  last_updated: 2026-09-10
+  version: 1.1.0
+  last_updated: 2026-11-13
 ---
 
 # Carousel Generator — hybrid AI-cover + HTML body, 4:5 IG carousels
@@ -101,12 +101,14 @@ Each slide is one layout. **Slide 1 should be `cover_image` (the AI cover); last
 | `cover` | `kicker?`, `headline`, `subhead?`, `swipe?` | typographic (no-image) cover — the fallback when you don't want an AI cover |
 | `statement` | `kicker?`, `headline`, `body?` | one big idea per slide |
 | `list` | `kicker?`, `headline?`, `items[{title, body?}]` | numbered steps / breakdown (2–5 items) |
-| `media` | `image`, `headline?`, `kicker?`, `body?` | body slide with a raster image — a screenshot, product shot, or web image |
+| `media` | `image`, `headline?`, `kicker?`, `body?`, `url?`, `video?` | body slide with a raster image — a screenshot, product shot, video frame, or web image |
 | `stat` | `kicker?`, `value`, `label`, `body?` | a big number (a view count, a dollar figure, hours saved) |
 | `quote` | `quote`, `attribution?` | a member win or punchy line |
 | `cta` | `kicker?`, `headline`, `body?`, `action?`, `button?` | last slide — the funnel ask |
 
 - **`image` field** (on `cover_image` + `media`): a local path (relative to the manifest file), an absolute path, an `http(s)` URL, or a `data:` URI. `render.js` downloads/embeds it as base64 automatically — the deck stays self-contained. Cover images come from `cover.py`; `media` images are usually real screenshots the creator provides (GitHub, a product, a result) or a web image URL.
+- **`url`** (media): the source link shown under the caption with an accent bar, e.g. `"github.com/owner/repo"`. An array prints one per line. Use it whenever the slide is about a tool, repo, or site, so people can find it without asking.
+- **`video`** (`cover_image`, `media`): turns that slide into an MP4. See **Video slides** below.
 - `swipe` on a cover: short cue text (`"How it works"`, `"Swipe →"`); set `false` to hide.
 - `action` (cta) renders as a bold line w/ accent bar; `button` renders a filled accent pill. Use one.
 - **Inline emphasis in any text:** `*word*` → accent color, `**word**` → bold ink. Use sparingly (one highlight per headline max). Never put markdown/emphasis in an `image` field.
@@ -150,14 +152,15 @@ Illustrative example only: `<...>` are placeholders, the stat value and the quot
 }
 ```
 
-Optional manifest flags: `show_page_numbers` (default true), `show_progress` (top ticks, default true).
+Optional manifest flags: `show_page_numbers` (default true), `show_progress` (top ticks, default true), `source_video` (default clip for every slide's `video`, relative to the manifest).
 
 ## Design Rules (baked in — respect them in COPY)
 
 The template enforces layout/type/color. Your job is copy that fits:
 
-- **Slide count: 6–9.** Cover + 4–7 body + CTA. Under 6 feels thin, over 10 loses people.
-- **Cover hook < 12 words.** It's a thumb-stopper, not a sentence. Front-load the payoff or tension.
+- **Slide count: 6–9.** Cover + 4–7 body + CTA. Under 6 feels thin, over 10 loses people. Exception: a "10 tools/repos" list post keeps one slide per item (12 is fine; IG allows 20).
+- **Cover hook < 12 words.** It's a thumb-stopper, not a sentence. Front-load the payoff or tension. Repurposing a YouTube video: use its exact title as the headline (`yt-dlp --skip-download --print title "<url>"`); the title already won the click.
+- **Spell names from the source, not the transcript.** Auto-captions mangle tool/repo names; take names and links from the video description (`--print description`).
 - **One idea per slide. ≤ ~125 characters of body per slide.** Walls of text are the #1 AI-slop tell — auto-fit shrinks huge blocks, but that means you wrote too much. Cut.
 - **`list` items: 2–5 max**, each title ≤ 4 words, body one line.
 - **`media` body caption: one line.** The image is the point; the caption just frames it.
@@ -176,6 +179,30 @@ One offer, one motion. Every carousel's CTA slide + caption CTA tie to the offer
 Example only: "Comment SYSTEM and I'll send you the link to the community."
 
 A soft mention can appear mid-deck; the hard ask is the `cta` slide. Never pitch anything `backbone/offer.md` marks as retired, dead, or not sold (its "What is NOT sold" list when it has one); no side-door CTAs. Never drop the CTA by accident.
+
+## Video slides (repurposing a video)
+
+When the carousel comes from a video, the strongest slides *play* the moment they describe. Instagram carousels mix images and MP4s, so `render.js` turns any `cover_image` or `media` slide with a `video` block into `slide_NN.mp4` (1080×1350, H.264) next to its PNG. Needs `ffmpeg` on the PATH.
+
+```json
+"source_video": "src.mp4",
+"slides": [
+  { "type": "cover_image", "image": "frames/cover.png", "headline": "<exact video title>",
+    "video": { "start": 1.0, "duration": 3.5, "speed": 1.4 } },
+  { "type": "media", "kicker": "REPO 07", "headline": "Real physics in your scenes.", "image": "frames/r07.png",
+    "body": "Dominoes, Jenga, a Galton board.", "url": "github.com/pmndrs/react-three-rapier",
+    "video": { "start": 571, "duration": 6, "crop": "1396:784:66:206" } }
+]
+```
+
+- **`video` fields:** `start` / `duration` (seconds in the source), `crop` (`W:H:X:Y` ffmpeg crop of the source, applied first), `speed` (1.4 = 40% slower; the output runs `duration × speed`), `src` (overrides `source_video`), `audio` (`{ "src": "aud.m4a", "start": 10.1 }`; default is silent).
+- **`media`:** the clip fills the rounded image box exactly (cover-fit, same crop as the still), over the rendered slide. Keep `image` set to a frame of the same clip: the PNG and contact sheet use it.
+- **`cover_image`:** the clip plays full-bleed under the scrim and headline, and the swipe arrow eases right and back once a second (the loop is seamless). The cover needs an `image` too (a frame), or it falls back to a typographic cover.
+- **Getting the source:** `yt-dlp -f "bv*[height<=1080]" -o src.mp4 "<url>"`. Quote the URL (zsh globs the `?`). This file has no audio track.
+- **Picking moments:** grab ~25 frames across the video at 480px and tile them (`ffmpeg ... -vf tile=4x7`) to find each item fast. If the creator shows graphics in a consistent card, measure that card once and reuse one `crop` for every slide. Keep their webcam bubble out of the crop.
+- **Picking clean windows:** cut detection around each moment, then use the longest cut-free 5–6s that contains it: `ffmpeg -ss <t-8> -t 16 -i src.mp4 -vf "crop=<card>,select='gt(scene,0.25)',showinfo" -an -f null - 2>&1 | grep -o 'pts_time:[0-9.]*'`. Stop before the creator's own text cards slide in. A clip that cuts on every beat is fine if that's the point.
+- **Audio only where it's the point** (a beat-sync demo, a voice result); otherwise leave slides silent so the creator adds IG music. Fetch just that span: `yt-dlp -f ba -x --audio-format m4a --download-sections "*<a>-<b>" -o "aud.%(ext)s" "<url>"`. The section snaps to a keyframe and comes back longer than asked, so transcribe it to find the speech-free offset before setting `audio.start`.
+- **Check every MP4:** grab frames at ~0.3s and ~3s from each, tile them, and look. Each slide must show its own item for the whole clip.
 
 ## Template Library — repeatable decks
 
@@ -219,7 +246,7 @@ Output lands beside the manifest in `carousel/outputs/<slug>/`: `slide_01.png �
 
 ## Posting (manual)
 
-Carousels are posted by hand: upload the `slide_01.png … slide_NN.png` set in the Instagram app and paste the caption block from `caption.md`. `auto-poster` is single-media only (one video or one image per post), so it cannot publish a multi-slide carousel. This skill stops at files + caption.
+Carousels are posted by hand: upload the `slide_01.png … slide_NN.png` set in the Instagram app (use `slide_NN.mp4` in place of the PNG wherever one exists) and paste the caption block from `caption.md`. `auto-poster` is single-media only (one video or one image per post), so it cannot publish a multi-slide carousel. This skill stops at files + caption.
 
 ## Gotchas
 
@@ -233,6 +260,7 @@ Carousels are posted by hand: upload the `slide_01.png … slide_NN.png` set in 
 - **Auto-fit shrinks oversized headlines** to fit. If text looks small, the copy is too long — shorten it.
 - **Preview vs final must match** — both use `template.html`. If they differ, something's wrong; don't ship.
 - **One theme + one font per deck.** Per-slide overrides are intentionally unsupported (consistency is the design).
+- **Video slides need `ffmpeg`.** Without it the PNGs still render and each video slide prints a warning. Preview mode shows stills only.
 - **Posting is manual** (see Posting above). Don't hand the PNG set to `auto-poster`; it takes one media file per post.
 
 ## What This Skill Does NOT Do
