@@ -33,6 +33,7 @@ Skills are markdown files that give AI agents specialized knowledge and workflow
 | [content-research/yt-feed-research](skills/content-research/yt-feed-research/) | Scan your logged-in YouTube home feed for outlier ideas using VidIQ badges, dismissing off-niche tiles to tailor the feed (Claude in Chrome). |
 | [content-writing/hook-generator](skills/content-writing/hook-generator/) | Write 6-8 spoken hooks for a video idea, each built on a proven framework from a 404-hook bank ranked by views. |
 | [content-writing/scriptwriter](skills/content-writing/scriptwriter/) | Turn a research pick or raw idea into a filmable beat sheet in Notion, drafted against verbatim transcripts of your own top videos and voice-linted. |
+| [content-writing/yt-planning](skills/content-writing/yt-planning/) | Workshop a rough video idea into a fleshed-out premise (`/yt-planning`), one stage at a time on a call or in chat: big promise and chapters, what to show per chapter, format, flow, personal angle, offer tie-in, and a pre-shoot to-do list, applying the Content OS idea tips, then saved to your content pipeline. |
 | [content-writing/voice-corpus-builder](skills/content-writing/voice-corpus-builder/) | Build `voice-corpus/` from your own top YouTube and Instagram videos and draft `voice-dna.md`, the voice rulebook the writing skills use. |
 | [content-writing/knowledge-compile](skills/content-writing/knowledge-compile/) | Refresh `knowledge/`: short, source-linked pages summarizing your research, transcripts, and business docs for ideation and scripting. |
 | [content-writing/yt-description](skills/content-writing/yt-description/) | Write a finished long-form video's YouTube description in your channel's live format, with chapter timestamps indexed from the final export. |
@@ -120,6 +121,9 @@ Once installed, just ask your agent to help with video editing tasks:
 
 "Post this video: ~/Downloads/final.mp4"
 → Uses content-distribution/auto-poster skill
+
+"Let's plan my next YouTube video about AI video editing"
+→ Uses content-writing/yt-planning skill
 ```
 
 You can also invoke a skill directly:
@@ -145,6 +149,7 @@ You can also invoke a skill directly:
 /auto-poster
 /carousel-generator
 /dm-revival
+/yt-planning
 ```
 
 ## Content OS workspace

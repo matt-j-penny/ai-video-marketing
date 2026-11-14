@@ -1,0 +1,19 @@
+{
+  "skill_name": "yt-planning",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Let's plan a YouTube video: I want to show how I use AI agents to edit my videos.",
+      "expected_output": "Should load notion-pipeline.md and backbone/offer.md, search the content pipeline for a matching idea page, then workshop one stage at a time: first ask the big promise and how it's delivered (turning the 'how' into chapters), go chapter by chapter (focus, show, talk about, screen share vs talking to camera with motion graphics), then audience payoff, format, sections & flow, personal angle, the tie-in to the offer in backbone/offer.md plus an email deliverable, and finish with a pre-shoot to-do list. It applies the Content OS idea tips throughout, then creates a new page with Status Idea and Format Long-form (Type left blank) or appends after a divider on an existing page without overwriting, and confirms which happened.",
+      "assertions": [
+        "Asks the big promise and how it's delivered before the premise tips",
+        "Works one stage at a time instead of dumping the full checklist",
+        "Applies the Content OS idea tips (premise, script, proof, thumbnail)",
+        "Ties the video to the offer from backbone/offer.md, not a hardcoded one",
+        "Ends with a pre-shoot to-do list",
+        "Saves via the Notion MCP per notion-pipeline.md, appending rather than overwriting an existing page and leaving Type blank"
+      ],
+      "files": []
+    }
+  ]
+}
