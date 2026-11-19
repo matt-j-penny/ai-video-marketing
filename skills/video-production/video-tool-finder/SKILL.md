@@ -1,9 +1,9 @@
 ---
 name: video-tool-finder
-description: "Pick the right open-source tool, library or agent skill for a video job before building it. A researched catalog of ~58 GitHub repos (editing/cleanup, motion graphics, Claude video skills and style packs, audio/voice/captions, 3D) with what each does best, when to use it, when not to, license and install. Use when the user asks 'what should I use to make/edit X', 'is there a tool/skill for…', is planning a video, motion graphic, voiceover, caption, 3D or code-rendered film and the approach isn't decided yet, or invokes '/video-tool-finder'. Also use it yourself before starting any video build where the stack hasn't been chosen."
+description: "Pick the right open-source tool, library or agent skill for a video job before building it. A researched catalog of ~105 GitHub repos (editing/cleanup, motion graphics, Claude video skills and style packs, audio/voice/captions, 3D) with what each does best, when to use it, when not to, license and install. Use when the user asks 'what should I use to make/edit X', 'is there a tool/skill for…', is planning a video, motion graphic, voiceover, caption, 3D or code-rendered film and the approach isn't decided yet, or invokes '/video-tool-finder'. Also use it yourself before starting any video build where the stack hasn't been chosen."
 metadata:
-  version: 1.0.0
-  last_updated: 2026-11-05
+  version: 1.1.0
+  last_updated: 2026-11-19
 ---
 
 # Video Tool Finder
@@ -53,13 +53,31 @@ Code-rendered films (Opus 5.5 style) all share one pipeline: a web page draws fr
 | Upscale or restore old/low-res footage | Real-ESRGAN | Topview/Higgsfield upscale (paid) |
 | Download source footage | yt-dlp | — |
 | Screen recording | OBS Studio | macOS screenshot tool |
-| Motion graphics in code, agent-driven | HyperFrames | Remotion (+ Remotion Skills) |
+| Video editor GUI (free, open-source) | Kdenlive | Shotcut, OpenShot |
+| Reverse-engineer a video shot-by-shot | Rea-Video | `mograph-snatcher`, manual analysis |
+| Code agent → video agent (hybrid workflow) | OpenFilm | HyperFrames, Remotion |
+| Motion graphics in code, agent-driven | HyperFrames | Remotion, Motion Canvas |
 | Product promo / launch film from screenshots | video-shotcraft | huashu-motion, Remotion |
 | Pick a named visual style for a code film | lemo-opuscar | mg-styles-15, animate |
 | Math / diagram explainer | Manim | animate (math style) |
+| Data visualization / charts | D3 | Remotion + Recharts |
 | Hand-drawn cartoon character animation | ClaudeAnimationBase | OpenToonz (manual) |
+| Sketchy / hand-drawn look | Rough.js | canvas-sketch |
 | Pixel-art effects | pixelfx | — |
+| Interactive particles / confetti | tsParticles | mo.js |
+| Fluid / liquid effects | WebGL Fluid Simulation | regl custom shaders |
+| Shape morphing / interpolation | Flubber | GSAP MorphSVG |
+| Typing animation | Typed.js | custom GSAP |
+| Text split for per-character animation | Splitting | GSAP SplitText |
+| Gradient animations | Granim.js | CSS, GSAP |
+| Image hover distortion | hover-effect | custom shaders |
+| 3D tilt effect on hover | vanilla-tilt.js | CSS transforms |
+| Flip clock / counter | Flip | custom canvas |
+| Hand-drawn annotations | Rough Notation | Rough.js custom |
 | Find the right name for a motion move | motion-prompt | `animation-vocabulary` skill |
+| Teach agents motion design principles | Motion Design Skill | Impeccable |
+| Catch AI design slop | Unslop | Impeccable |
+| Review design quality | Impeccable | manual review |
 | Prompt inspiration for code-rendered video | awesome-opus5-5-videos | opus-video-prompts, awesome-claude-5-5-videos |
 | Music video with lyric sync | pdoom-video (study it) | PDoomVideo |
 | AI-generated footage/images (not code) | Higgsfield Skills | ComfyUI (local) |
@@ -70,23 +88,35 @@ Code-rendered films (Opus 5.5 style) all share one pipeline: a web page draws fr
 | Fix/sync subtitle files by hand | Subtitle Edit | — |
 | Split music from vocals / stems | Demucs | ElevenLabs voice-isolator (paid) |
 | Beat grid for cutting to music | librosa | `capcut/beat-detector` |
-| Voiceover, free and quick | edge-tts | Kokoro (local) |
+| Audio waveform visualization | wavesurfer.js | canvas-sketch |
+| Voiceover, free and quick | edge-tts | Piper, Kokoro (local) |
 | Voiceover, high quality local / cloning | Chatterbox | Qwen3-TTS, CosyVoice (multilingual) |
 | Voiceover, SFX, music via API | ElevenLabs Skills | elevenlabs MCP |
 | Clean up / mix audio by hand | Audacity | `level-audio` skill |
+| Remove background noise from voice | DeepFilterNet | ElevenLabs voice-isolator (paid) |
+| 2D mouth animation from audio | Rhubarb Lip Sync | manual animation |
 | 3D scene or product render | Blender + Blender MCP | Three.js |
+| AI assets in Blender | Scenario Blender Plugin | Blender MCP |
 | Rigged human for 3D | MPFB2 | — |
 | Motion capture from a webcam | FreeMoCap | — |
 | 3D in a browser-coded film | Three.js | — |
+| Particle effects in Three.js | three.quarks | PointsMaterial |
+| Physics in React Three Fiber | react-three-rapier | cannon-es |
+| Postprocessing in React Three Fiber | react-postprocessing | raw three postprocessing |
+| 3D text rendering in Three.js | Troika | TextGeometry |
+| Camera controls in Three.js | camera-controls | OrbitControls |
+| Thick lines in Three.js | MeshLine | fat lines |
+| GPU physics / simulations | Taichi | gpu-io |
+| Custom shaders library | LYGIA | ShaderToy snippets |
 | Timeline/tween animation in HTML | GSAP | Anime.js, Motion |
 | Bursts, shape effects | mo.js | GSAP |
 | Play After Effects animations | Lottie (lottie-web) | — |
-| Visual keyframe editor for web animation | Theatre.js | — |
-| 2D vector drawing/animation API | Two.js | Canvas directly |
+| Visual keyframe editor for web animation | Theatre.js | Motion Canvas |
+| 2D vector drawing/animation API | Two.js | SVG.js, Canvas directly |
 
 ## Catalog
 
-Stars and dates are a snapshot from 2026-11-05. "Agent-ready" means it ships a Claude Code skill or MCP.
+Stars and dates are a snapshot from 2026-11-19. "Agent-ready" means it ships a Claude Code skill or MCP.
 
 ### Editing and cleanup
 
@@ -134,6 +164,18 @@ Use when: grabbing reference or source footage. Respect copyright: reference/ana
 Best at: screen + camera recording and live streaming with scenes and sources.
 Use when: the user needs to record a screen demo or tutorial. Human-operated; not something an agent drives.
 
+**Kdenlive** — github.com/KDE/kdenlive · GPL-3.0 · 6.1k★ · desktop app
+Best at: free open-source non-linear video editor with multi-track timeline, effects, transitions, color correction, and broad format support.
+Use when: a human wants a full-featured FOSS video editor (Linux-first, runs on Mac/Windows). For agent-driven editing use Remotion/HyperFrames or the `davinci-resolve` MCP.
+
+**Rea-Video** — github.com/JuneYaooo/rea-video · Apache-2.0 · 11k★ · `npx skills add juneyaooo/rea-video` · agent-ready
+Best at: reverse-engineering any video shot by shot — filmed, AI-generated, or coded — identifying the technique and outputting a structured VIDEO.md breakdown with remake instructions.
+Use when: analyzing reference videos to learn their production method before recreating the style. Pairs well with `mograph-snatcher` and `youtube-editing-style`.
+
+**OpenFilm** — github.com/openfilm/openfilm · MIT · 8.5k★ · desktop app
+Best at: turning any coding agent into a video agent — each shot becomes an editable web page (images/animations in HTML/CSS), timeline editor like CapCut, MP4 export.
+Use when: a hybrid workflow where code generates shots but a human wants timeline control. 5,800+ stars but young; watch for stability.
+
 ### Motion graphics and animation
 
 **Remotion** — github.com/remotion-dev/remotion · Remotion license (free for individuals/small teams, paid company license) · 71k★ · `npx create-video@latest`
@@ -168,11 +210,131 @@ Use when: any HTML/SVG motion. There's a `gsap` skill loaded in this setup.
 Best at: node-graph workflows for local AI image/video generation (Flux, Wan, Hunyuan, etc.), ControlNet, upscaling.
 Use when: the user has a capable GPU and wants local generation with fine control. On a Mac without a strong GPU, hosted Higgsfield/Topview is more practical.
 
+**D3** — github.com/d3/d3 · ISC · 114k★ · npm
+Best at: data-driven documents — charts, graphs, network diagrams, maps, any visualization where data binds to SVG/Canvas/HTML.
+Use when: the motion graphic is fundamentally about data, not just illustration. The industry standard for web data viz.
+
+**Motion Canvas** — github.com/motion-canvas/motion-canvas · MIT · 20k★ · npm
+Best at: programmatic animation with TypeScript, visual editor, real-time preview, tweening, and scenes. Code-first but with GUI controls.
+Use when: you want code control with a visual timeline for tweaking. A middle ground between pure code (HyperFrames) and pure GUI (After Effects).
+
+**Rough.js** — github.com/rough-stuff/rough · MIT · 21.4k★ · npm
+Best at: creating graphics with a hand-drawn, sketchy appearance — lines, curves, fills, all with controllable "roughness."
+Use when: the look needs to feel informal, human, or sketchbook-style. Works with Canvas, SVG, and most libraries.
+
+**mo.js** — github.com/mojs/mojs · MIT · 18.9k★ · npm
+Best at: burst animations, shape effects, timeline control, and declarative motion — the "pop" library for UI.
+Use when: celebrating moments (success, level-up, confetti), transitions, or UI flourishes. Complements GSAP (GSAP for timelines, mo.js for bursts).
+
+**PixiJS** — github.com/pixijs/pixijs · MIT · 48.9k★ · npm
+Best at: ultra-fast 2D WebGL rendering with sprites, filters, blend modes, containers. The engine under many web games.
+Use when: rendering hundreds of moving objects or when Canvas 2D is too slow. Not declarative like React — lower-level than Remotion.
+
+**WebGL Fluid Simulation** — github.com/PavelDoGreat/WebGL-Fluid-Simulation · MIT · 16.9k★ · standalone JS file
+Best at: beautiful, interactive fluid dynamics that run on GPU — works on mobile browsers.
+Use when: abstract, organic backgrounds or interactive visualizations. Drop the script in any page. Touch/mouse reactive.
+
+**Typed.js** — github.com/mattboldt/typed.js · no explicit license · 16.3k★ · npm
+Best at: realistic typing animations with backspace, pauses, multiple strings, smart backspacing.
+Use when: terminal-style reveals, typewriter effects, or chatbot-style text. Simple to integrate.
+
+**Zdog** — github.com/metafizzy/zdog · no explicit license · 10.7k★ · npm
+Best at: flat, round, designer-friendly pseudo-3D engine for Canvas/SVG — rotatable 3D shapes without WebGL complexity.
+Use when: isometric or low-poly looks without Three.js overhead. Great for icons, diagrams, and playful 3D.
+
+**SVG.js** — github.com/svgdotjs/svg.js · no explicit license · 11.9k★ · npm
+Best at: lightweight SVG manipulation and animation — create, morph, animate SVG elements with a simple API.
+Use when: vector animations, morphing shapes, or drawing without Canvas. Smaller and simpler than D3 for non-data work.
+
+**Isotope** — github.com/metafizzy/isotope · no explicit license · 11.1k★ · npm
+Best at: filtering, sorting, and animating grid layouts with masonry, fitRows, and other layouts.
+Use when: animated product grids, portfolio galleries, or category filters with smooth transitions.
+
+**Rough Notation** — github.com/rough-stuff/rough-notation · MIT · 9.8k★ · npm
+Best at: animated hand-drawn annotations — underline, box, circle, highlight, strike-through, bracket.
+Use when: emphasizing text or UI elements with a human, informal touch. Pairs well with Rough.js.
+
+**tsParticles** — github.com/tsparticles/tsparticles · MIT · 9.1k★ · npm, framework wrappers
+Best at: highly customizable particle effects, confetti, fireworks, snow, and animated backgrounds with React/Vue/Angular components.
+Use when: celebration effects, ambient backgrounds, or interactive particle systems. Feature-rich but heavier than mo.js.
+
+**EffectCraft** — github.com/storytold/effectcraft · Apache-2.0 · 9k★ · standalone app (Rust-based)
+Best at: open-source motion graphics and compositing tool written in Rust — node-based, GPU-accelerated, aims to be an After Effects alternative.
+Use when: a human wants a free compositing app. Very young (launched 2024); not agent-drivable yet. Watch this space.
+
+**Flubber** — github.com/veltman/flubber · MIT · 7k★ · npm
+Best at: smooth shape-to-shape interpolation (SVG path morphing) with multiple algorithms.
+Use when: animating between two SVG shapes. Handles tricky cases like different point counts. Use with GSAP or D3 transitions.
+
+**3D Force Graph** — github.com/vasturiano/3d-force-graph · MIT · 6.6k★ · npm
+Best at: 3D network/graph visualizations with force-directed layouts, using Three.js under the hood.
+Use when: visualizing connections, hierarchies, or networks in 3D. Interactive camera, customizable nodes/links.
+
+**canvas-sketch** — github.com/mattdesl/canvas-sketch · MIT · 5.3k★ · npm
+Best at: a framework for generative artwork — hot-reload, export frames/video, print sizes, CLI tools.
+Use when: generative art, creative coding, or algorithm-driven visuals. Designed for artists; pairs with p5, Three.js, or raw Canvas.
+
+**regl** — github.com/regl-project/regl · MIT · 5.6k★ · npm
+Best at: functional WebGL — simpler, cleaner API than raw WebGL without the overhead of Three.js.
+Use when: custom shaders, generative visuals, or data viz that needs GPU speed but not a full 3D engine.
+
+**Granim.js** — github.com/sarcadass/Granim.js · MIT · 5.3k★ · npm
+Best at: fluid, interactive gradient animations with color transitions and image blending.
+Use when: animated gradient backgrounds, hero sections, or ambient color-shifting effects.
+
+**Tweakpane** — github.com/cocopon/tweakpane · MIT · 4.7k★ · npm
+Best at: compact GUI for fine-tuning parameters and monitoring value changes in real-time.
+Use when: debugging generative animations, exposing controls for creative tweaking, or building live parameter UIs.
+
+**vanilla-tilt.js** — github.com/micku7zu/vanilla-tilt.js · MIT · 4k★ · npm
+Best at: smooth 3D tilt effect on hover — cards, images, or any element.
+Use when: adding depth and interactivity to flat elements. Lightweight, no dependencies.
+
+**Synfig** — github.com/synfig/synfig · GPL-3.0 · 2.5k★ · desktop app
+Best at: open-source 2D vector animation with bones, tweening, and traditional animation tools.
+Use when: a human animator wants a free 2D animation app. Not agent-driven; for agent cartoons use ClaudeAnimationBase.
+
+**hover-effect** — github.com/robin-dela/hover-effect · MIT · 1.9k★ · npm
+Best at: WebGL-powered image hover distortion effects (liquid, displacement maps).
+Use when: interactive portfolio images, product showcases, or artistic image transitions.
+
+**Splitting** — github.com/shshaw/splitting · MIT · 1.8k★ · npm
+Best at: splitting elements by words, characters, lines, or children — each with CSS variables for staggered animations.
+Use when: text reveals, per-character effects, or any staggered animation. Pairs perfectly with GSAP.
+
+**jquery.ripples** — github.com/sirxemic/jquery.ripples · MIT · 1.1k★ · jQuery plugin
+Best at: water ripple effect on any background using WebGL.
+Use when: interactive water effects for hero sections or creative backgrounds. Requires jQuery.
+
+**Flip** — github.com/pqina/flip · MIT · 1k★ · npm
+Best at: classic flip clock/counter animation with customizable styles.
+Use when: countdowns, timers, or retro number displays.
+
+**Hydra** — github.com/hydra-synth/hydra · AGPL-3.0 · 2.8k★ · live coding environment
+Best at: livecoding networked visuals in the browser with analog video synth-style functions.
+Use when: VJ sets, experimental visuals, or live performances. Not for typical motion graphics — this is for live improvisation.
+
+**ai-kit (Motion)** — github.com/motiondivision/ai-kit · no explicit license · 134★ · Cursor plugin
+Best at: Cursor plugin for Motion (Framer Motion) with autocomplete, docs, and templates.
+Use when: using Framer Motion in Cursor. Tiny plugin; mainly convenience.
+
 ### Claude video skills, style packs and prompt collections
 
 **Remotion Skills** — github.com/remotion-dev/skills · 6.4k★ · `npx skills add remotion-dev/skills` · agent-ready
 Best at: official Remotion know-how — create, markup, studio, render, maps, captions, docs lookup, upgrade.
 Use when: building anything in Remotion. A `remotion-best-practices` skill is already loaded here.
+
+**Impeccable** — github.com/pbakaus/impeccable · Apache-2.0 · 113k★ · `npx skills add pbakaus/impeccable` · agent-ready
+Best at: the design vocabulary for coding agents — steer with "polish" and "bolder," review with "critique" and "audit," catch AI slop before it ships.
+Use when: any visual output (UI, graphics, video) needs design feedback. Teaches agents what good design looks like. Extremely high adoption (113k stars).
+
+**Unslop** — github.com/heydamir/unslop · CC BY 4.0 · 18.7k★ · `npx skills add heydamir/unslop` · agent-ready
+Best at: turning vibecoded, AI-looking UI into a designed interface — fixing generic gradients, awkward spacing, and typical AI tells.
+Use when: an agent-built UI or graphic looks "off." Complements Impeccable (Impeccable sets vocabulary, Unslop fixes slop).
+
+**Motion Design Skill** — github.com/LottieFiles/motion-design-skill · MIT · 3.4k★ · `npx skills add lottiefiles/motion-design-skill` · agent-ready
+Best at: universal motion design principles for AI agents — timing, easing, choreography, Disney animation principles adapted for UI.
+Use when: any code-animated work. Teaches 12 principles of animation, anticipation, follow-through, squash/stretch, etc. Foundational.
 
 **video-shotcraft** — github.com/Vincentwei1021/video-shotcraft · Apache-2.0 · 17k★ · `npx skills add Vincentwei1021/video-shotcraft` · agent-ready
 Best at: product promo films from your real pages/screenshots in Remotion: 124 shot recipe cards / 150 shots, storyboard, beat-synced cut, sound design, per-frame checks; editable in its Motion Workbench; JianYing export. Sibling `video-talkcraft` locks motion to a narration.
@@ -292,6 +454,22 @@ Use when: premium voiceover, SFX or music via API. The `elevenlabs` MCP is also 
 Best at: manual audio cleanup — noise reduction, EQ, compression, multitrack mixing.
 Use when: a human is cleaning audio by ear. Agents should use ffmpeg filters / `level-audio`.
 
+**wavesurfer.js** — github.com/katspaugh/wavesurfer.js · BSD-3-Clause · 10.5k★ · npm
+Best at: audio waveform player with interactive waveforms, regions, markers, and peaks.
+Use when: visualizing audio for editing UIs, podcast timelines, or music players. Renders to Canvas or Web Audio API.
+
+**Piper** — github.com/OHF-Voice/piper1-gpl · GPL-3.0 · 6.3k★ · `pip install piper-tts`
+Best at: fast, local neural text-to-speech engine with many voices and languages.
+Use when: quick, offline voiceovers without API costs. Quality is good but not quite Chatterbox/Qwen3-TTS level.
+
+**DeepFilterNet** — github.com/Rikorose/DeepFilterNet · no explicit license · 5.1k★ · Python, GPU helps
+Best at: noise suppression using deep filtering — cleans up background noise from voice recordings.
+Use when: cleaning noisy recordings before transcription or voiceover use. Alternative to ElevenLabs voice-isolator (paid).
+
+**Rhubarb Lip Sync** — github.com/DanielSWolf/rhubarb-lip-sync · no explicit license · 2.8k★ · command-line tool
+Best at: automatically creating 2D mouth animation from voice recordings — outputs phoneme timings for cartoon characters.
+Use when: syncing a cartoon character's mouth to dialogue. Works with Spine, Moho, Adobe Animate, etc.
+
 ### 3D and scene tools
 
 **Blender** — github.com/blender/blender · GPL · 22k★ · desktop app with Python API
@@ -330,12 +508,53 @@ Use when: animating React UI for screen recordings or web. In Remotion, prefer R
 Best at: one 2D drawing API that renders to SVG, Canvas or WebGL.
 Use when: procedural 2D shapes/vector animation without picking a renderer up front.
 
+**Taichi** — github.com/taichi-dev/taichi · Apache-2.0 · 28.5k★ · `pip install taichi`
+Best at: productive, portable, high-performance GPU programming in Python — parallel computing, physics simulations, graphics.
+Use when: custom physics, simulations, or compute-heavy visuals that need GPU acceleration. Powers many research projects.
+
+**Troika** — github.com/protectwise/troika · MIT · 2k★ · npm
+Best at: JavaScript framework for interactive 3D and 2D visualizations — text rendering in Three.js, WebGL UI, and layout tools.
+Use when: rendering high-quality 3D text in Three.js (Troika's text renderer is excellent) or building 3D UIs.
+
+**three.quarks** — github.com/Alchemist0823/three.quarks · MIT · 1.2k★ · npm
+Best at: general-purpose particle system / VFX engine for Three.js — GPU-accelerated, behavior graphs.
+Use when: fire, smoke, explosions, magic effects, weather in a Three.js scene. More advanced than basic PointsMaterial.
+
+**react-three-rapier** — github.com/pmndrs/react-three-rapier · MIT · 1.7k★ · npm
+Best at: Rapier physics in React Three Fiber — rigid bodies, collisions, joints, raycasting.
+Use when: physics-driven 3D in React (falling objects, ragdolls, simulations). Fast and deterministic.
+
+**react-postprocessing** — github.com/pmndrs/react-postprocessing · MIT · 1.7k★ · npm
+Best at: postprocessing effects for react-three-fiber — bloom, depth of field, glitch, vignette, etc.
+Use when: adding cinematic or stylized effects to React Three scenes. Declarative wrapper around three's postprocessing.
+
+**gpu-io** — github.com/amandaghassaei/gpu-io · MIT · 1.5k★ · npm
+Best at: GPU-accelerated computing library for physics simulations and GPGPU in the browser.
+Use when: custom simulations (fluids, particles, physics) that need GPU speed. Lower-level than Taichi.
+
+**Scenario Blender Plugin** — github.com/scenario-labs/blender-plugin · GPL-3.0 · 1.1k★ · Blender extension
+Best at: AI images, video, 3D and PBR materials in Blender viewport, plus a local MCP server for agents. Blender 5.0+ extension.
+Use when: bringing AI generation into Blender workflows. Still young but integrates AI models directly into Blender.
+
+**camera-controls** — github.com/yomotsu/camera-controls · MIT · 2.5k★ · npm
+Best at: camera control for Three.js — similar to OrbitControls but supports smooth transitions, more features, and better API.
+Use when: interactive 3D camera work in Three.js that needs smooth animations between views.
+
+**MeshLine** — github.com/pmndrs/meshline · MIT · 385★ · npm
+Best at: mesh replacement for THREE.Line — renders lines with actual geometry so they can have thickness and advanced materials.
+Use when: thick lines, glowing lines, or textured lines in Three.js. Standard Line is always 1px; MeshLine gives control.
+
+**LYGIA** — github.com/patriciogonzalezvivo/lygia · no explicit license · 3.5k★ · shader library
+Best at: granular, multi-language shader library (GLSL, HLSL, Metal, WGSL, WEGL, CUDA) for performance and flexibility.
+Use when: writing custom shaders and want reusable functions (noise, colors, lighting, etc.). Like a standard library for shaders.
+
 ## Licensing quick flags
 
 - **Non-commercial only**: video-editor-skills (CC BY-NC), story-studio (CC BY-NC-SA).
-- **No license (view only)**: PDoomVideo, opus-video-prompts.
+- **No license or unclear license (verify before commercial use)**: PDoomVideo, opus-video-prompts, Typed.js, Isotope, Zdog, SVG.js, ai-kit, Rhubarb Lip Sync, DeepFilterNet, LYGIA.
+- **Attribution required**: Unslop (CC BY 4.0).
 - **Company license may be needed**: Remotion.
-- **Copyleft (fine to use as a tool, careful if bundling code)**: FFmpeg (GPL builds), LosslessCut, color-matcher, ComfyUI, Blender, FreeMoCap (AGPL).
+- **Copyleft (fine to use as a tool, careful if bundling code)**: FFmpeg (GPL builds), LosslessCut, color-matcher, ComfyUI, Blender, FreeMoCap (AGPL), Hydra (AGPL), Kdenlive (GPL), OpenToonz, Synfig (GPL), EffectCraft (copyleft if bundling), Scenario Blender Plugin (GPL), Piper (GPL), Audacity (GPL).
 - **Paid API/credits**: Higgsfield Skills, ElevenLabs Skills.
 
 ## Output
