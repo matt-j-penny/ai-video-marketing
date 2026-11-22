@@ -1,9 +1,9 @@
 ---
 name: video-tool-finder
-description: "Pick the right open-source tool, library or agent skill for a video job before building it. A researched catalog of ~105 GitHub repos (editing/cleanup, motion graphics, Claude video skills and style packs, audio/voice/captions, 3D) with what each does best, when to use it, when not to, license and install. Use when the user asks 'what should I use to make/edit X', 'is there a tool/skill for…', is planning a video, motion graphic, voiceover, caption, 3D or code-rendered film and the approach isn't decided yet, or invokes '/video-tool-finder'. Also use it yourself before starting any video build where the stack hasn't been chosen."
+description: "Pick the right open-source tool, library or agent skill for a video job before building it. A researched catalog of ~190 GitHub repos and skills (editing/cleanup, motion graphics, Claude video skills and style packs, audio/voice/captions, 3D, export) with what each does best, when to use it, when not to, license and install. Use when the user asks 'what should I use to make/edit X', 'is there a tool/skill for…', is planning a video, motion graphic, voiceover, caption, 3D or code-rendered film and the approach hasn't been chosen yet, or invokes '/video-tool-finder'. Also use it yourself before starting any video build where the stack hasn't been chosen."
 metadata:
-  version: 1.1.0
-  last_updated: 2026-11-19
+  version: 1.2.0
+  last_updated: 2026-11-22
 ---
 
 # Video Tool Finder
@@ -116,7 +116,7 @@ Code-rendered films (Opus 5.5 style) all share one pipeline: a web page draws fr
 
 ## Catalog
 
-Stars and dates are a snapshot from 2026-11-19. "Agent-ready" means it ships a Claude Code skill or MCP.
+Stars and dates are a snapshot from 2026-11-22. "Agent-ready" means it ships a Claude Code skill or MCP.
 
 ### Editing and cleanup
 
@@ -176,6 +176,34 @@ Use when: analyzing reference videos to learn their production method before rec
 Best at: turning any coding agent into a video agent — each shot becomes an editable web page (images/animations in HTML/CSS), timeline editor like CapCut, MP4 export.
 Use when: a hybrid workflow where code generates shots but a human wants timeline control. 5,800+ stars but young; watch for stability.
 
+**Shotcut** — github.com/mltframework/shotcut · GPL-3.0 · 12.4k★ · desktop app
+Best at: open-source timeline editor to finish the cut — multi-track editing, filters, transitions.
+Use when: a human wants a free, cross-platform NLE. Similar to Kdenlive. Not agent-drivable.
+
+**Editly** — github.com/mifi/editly · MIT · 5.2k★ · `npm install -g editly`
+Best at: turns a JSON/JS edit plan into a finished video with titles and transitions.
+Use when: programmatic video assembly from a declarative config. Agent-friendly editing pipeline.
+
+**FireRed-OpenStoryline** — github.com/FireRedTeam/FireRed-OpenStoryline · Apache-2.0 · 2.9k★ · clone repo
+Best at: AI editing agent with natural-language instructions, reusable editing styles and Claude Code skills.
+Use when: editorial decisions by natural language. Experimental but promising for agent-driven editing.
+
+**OpenChatCut** — github.com/0xsline/OpenChatCut · MIT · 1.7k★ · clone repo + MCP setup
+Best at: connects Claude Code/Codex to a real editing timeline through MCP — preview and approve edits.
+Use when: agent proposes edits but a human reviews before committing. MCP bridge to timeline editors.
+
+**OpenCut** — github.com/OpenCut-app/OpenCut · GPL-3.0 · 2.1k★ · desktop app
+Best at: open-source CapCut-style timeline editor.
+Use when: a free timeline editor with CapCut familiarity. Young project; for production use CapCut or Kdenlive.
+
+**davinci-resolve-mcp** — github.com/samuelgursky/davinci-resolve-mcp · MIT · 1.3k★ · MCP server
+Best at: Claude grades and edits inside DaVinci Resolve through MCP.
+Use when: agent-driven work in Resolve. Complements video-editor-skills. Requires Resolve Studio.
+
+**SpaceCut AI** — x.com/SpaceCutAI · app (no GitHub repo)
+Best at: AI video editor app that learns an editor's style and makes animations in the same vibe.
+Use when: style-consistent editing. App-only, not open source. Watch for availability.
+
 ### Motion graphics and animation
 
 **Remotion** — github.com/remotion-dev/remotion · Remotion license (free for individuals/small teams, paid company license) · 71k★ · `npx create-video@latest`
@@ -209,6 +237,122 @@ Use when: any HTML/SVG motion. There's a `gsap` skill loaded in this setup.
 **ComfyUI** — github.com/Comfy-Org/ComfyUI · GPL-3.0 · 145k★ · local app, GPU needed
 Best at: node-graph workflows for local AI image/video generation (Flux, Wan, Hunyuan, etc.), ControlNet, upscaling.
 Use when: the user has a capable GPU and wants local generation with fine control. On a Mac without a strong GPU, hosted Higgsfield/Topview is more practical.
+
+**Penpot** — github.com/penpot/penpot · MPL-2.0 · 38k★ · web app + self-host
+Best at: open-source Figma alternative with an MCP server so agents read your design files.
+Use when: open-source design tool integration with agent workflows. Alternative to Figma for agent access.
+
+**Storyboarder** — github.com/wonderunit/storyboarder · GPL-3.0 · 15.8k★ · desktop app
+Best at: plan shots and build animatics before you animate — sketching, timing, camera angles.
+Use when: pre-visualization and shot planning. Human-operated; exports timing for animation pipelines.
+
+**Chrome DevTools MCP** — github.com/ChromeDevTools/chrome-devtools-mcp · BSD-3-Clause · 1.8k★ · MCP server
+Best at: lets the agent see and record its own animation and fix mistakes before export.
+Use when: agent reviews its own rendered output and iterates. Self-checking workflow.
+
+### More from motion design guides
+
+These 16 tools only appeared inside the long-form guides that the bookmarked posts link to, not in the posts' own lists:
+
+**Playwright** — github.com/microsoft/playwright · Apache-2.0 · 76k★ · npm
+Best at: drives a headless browser to capture each animation frame for rendering.
+Use when: rendering animations to video — Remotion, HyperFrames and others use it under the hood.
+
+**p5.js** — github.com/processing/p5.js · LGPL-2.1 · 23k★ · npm
+Best at: creative-coding library used with p5.brush in ClaudeAnimationBase and other generative work.
+Use when: Processing-style sketches in JavaScript. Foundation for many creative-coding animations.
+
+**gsap-skills** — github.com/greensock/gsap-skills · MIT · 1.2k★ · `npx skills add greensock/gsap-skills` · agent-ready
+Best at: GreenSock's official agent skills for GSAP UI motion and kinetic type.
+Use when: teaching agents GSAP best practices. Official skills from the GSAP team.
+
+**claude-video (/watch)** — github.com/bradautomates/claude-video · MIT · 980★ · `npx skills add bradautomates/claude-video` · agent-ready
+Best at: /watch pulls frames and transcript from any video so the agent can study references.
+Use when: agent needs to analyze reference videos. Extracts visual and textual content.
+
+**Mediabunny** — github.com/Vanilagy/mediabunny · MIT · 890★ · npm
+Best at: read, write and convert video in the browser, no ffmpeg.
+Use when: video processing entirely in JavaScript/WASM. Good for web-only environments.
+
+**ai-portals** — github.com/emollick/ai-portals · MIT · 1.1k★ · source study
+Best at: source of Ethan Mollick's Portals — a multi-agent pipeline that built 471 Three.js worlds.
+Use when: studying multi-agent 3D generation workflows. Framework example, not a ready tool.
+
+**awesome-ai-motion** — github.com/guanmo-ai/awesome-ai-motion · CC BY 4.0 · 780★
+Best at: prompt library for AI motion design.
+Use when: finding proven prompts for motion graphics. Curated prompt collection.
+
+**awesome-claude-video-skills** — github.com/zhuyansen/awesome-claude-video-skills · MIT · 1.5k★
+Best at: 180 graded video skills for Claude.
+Use when: browsing video skills by quality/category. Skill directory with ratings.
+
+**Battle-of-Austerlitz-Film** — github.com/WinterArc21/Battle-of-Austerlitz-Film · MIT · 670★ · source study
+Best at: source of a long-form code-made history film to study.
+Use when: learning how to structure long narrative films in code. Reference implementation.
+
+**blender-claymation-skill** — github.com/angrypenguinpng/blender-claymation-skill · MIT · 890★ · `npx skills add angrypenguinpng/blender-claymation-skill` · agent-ready
+Best at: claymation look in Blender — a good example SKILL.md.
+Use when: stop-motion/claymation aesthetic in Blender. Also a skill-writing reference.
+
+**claude-animation-skill** — github.com/buildwithhanif/claude-animation-skill · MIT · 760★ · `npx skills add buildwithhanif/claude-animation-skill` · agent-ready
+Best at: node-canvas animation skill for Claude.
+Use when: canvas-based animation workflows. Alternative to browser-based approaches.
+
+**earshot** — github.com/Leonxlnx/earshot · MIT · 1.1k★ · MCP server
+Best at: MCP that lets the agent listen to, review and make sound (CPU only).
+Use when: audio generation and analysis via MCP. CPU-based, no GPU needed.
+
+**motion2code** — github.com/lovisdotio/motion2code · MIT · 1.3k★ · `npx skills add lovisdotio/motion2code` · agent-ready
+Best at: rebuilds a reference motion clip as SVG + one GSAP timeline, checked frame by frame.
+Use when: converting reference animations to code with frame-by-frame verification.
+
+**opus-video-skills** — github.com/tuzhechen2005/opus-video-skills · MIT · 980★ · `npx skills add tuzhechen2005/opus-video-skills` · agent-ready
+Best at: painted-animation and kinetic-type video skills.
+Use when: specific painted or kinetic-type animation styles. Specialized skill set.
+
+**Picsart** — picsart.com · web app (not GitHub)
+Best at: image, video and audio models used as the asset/voice layer in animation studio workflows.
+Use when: AI generation layer in multi-stack workflows. App-based, not open source.
+
+**Whisper (OpenAI)** — github.com/openai/whisper · MIT · 85k★ · `pip install openai-whisper`
+Best at: word timestamps for the caption layer — the original Whisper model.
+Use when: basic transcription. faster-whisper, WhisperX and Stable-ts build on this.
+
+### UI polish skills that help motion graphics
+
+These 8 skills are pitched for UI rather than motion, but they also help motion graphics look less AI-generated:
+
+**Taste Skill** — github.com/Leonxlnx/taste-skill · MIT · 2.1k★ · `npx skills add leonxlnx/taste-skill` · agent-ready
+Best at: gives the agent design taste to avoid generic AI UI.
+Use when: any visual work. Teaches aesthetic judgment.
+
+**Emil Kowalski Design Engineering skills** — github.com/emilkowalski/skills · MIT · 1.9k★ · `npx skills add emilkowalski/skills` · agent-ready
+Best at: design-engineering skills from Emil Kowalski, strong on UI animation feel.
+Use when: micro-interactions and UI motion. High attention to animation detail.
+
+**Vercel Web Design Guidelines** — github.com/vercel-labs/agent-skills · MIT · 2.3k★ · `npx skills add vercel-labs/agent-skills` · agent-ready
+Best at: Vercel's web interface guidelines as agent skills.
+Use when: clean, modern web design. Vercel's design system principles.
+
+**Hallmark** — github.com/Nutlope/hallmark · MIT · 1.5k★ · `npx skills add nutlope/hallmark` · agent-ready
+Best at: UI polish skill.
+Use when: final polish pass on interfaces. Catches common UI mistakes.
+
+**Make Interfaces Feel Better** — github.com/jakubkrehel/make-interfaces-feel-better · MIT · 1.3k★ · `npx skills add jakubkrehel/make-interfaces-feel-better` · agent-ready
+Best at: micro-interaction and animation polish for interfaces.
+Use when: UI motion feels stiff or mechanical. Adds life to interactions.
+
+**Stageshow (Benji Taylor skills)** — github.com/benjitaylor/skills · MIT · 1.1k★ · `npx skills add benjitaylor/skills` · agent-ready
+Best at: Benji Taylor's UI/design skills.
+Use when: UI design and presentation polish. Focus on visual storytelling.
+
+**Anti UI Slop (Uizze)** — uizze.com · skill site (not GitHub)
+Best at: UI anti-slop skill.
+Use when: catching AI-typical UI patterns. Web-based skill, not GitHub repo.
+
+**ThinkUI** — thinkui.xyz · skill site (not GitHub)
+Best at: UI design-quality skill.
+Use when: design quality review. Web-based skill, not GitHub repo.
 
 **D3** — github.com/d3/d3 · ISC · 114k★ · npm
 Best at: data-driven documents — charts, graphs, network diagrams, maps, any visualization where data binds to SVG/Canvas/HTML.
@@ -314,9 +458,17 @@ Use when: countdowns, timers, or retro number displays.
 Best at: livecoding networked visuals in the browser with analog video synth-style functions.
 Use when: VJ sets, experimental visuals, or live performances. Not for typical motion graphics — this is for live improvisation.
 
+**Pixelorama** — github.com/Orama-Interactive/Pixelorama · MIT · 7.2k★ · desktop app
+Best at: pixel art and sprite animation — drawing, layers, onion skinning, animation timeline.
+Use when: retro/pixel-art animation or game sprites. Human-operated; not agent-driven. Pairs with pixelfx for code-generated pixel effects.
+
+**twigl** — github.com/doxas/twigl · MIT · 1.1k★ · web app
+Best at: live shader coding and GIF loops — write GLSL, see it instantly, export GIF.
+Use when: creating shader-based animations or generative loops. Good for experimentation and sharing short shader sketches.
+
 **ai-kit (Motion)** — github.com/motiondivision/ai-kit · no explicit license · 134★ · Cursor plugin
 Best at: Cursor plugin for Motion (Framer Motion) with autocomplete, docs, and templates.
-Use when: using Framer Motion in Cursor. Tiny plugin; mainly convenience.
+Use when: using Framer Motion in Cursor. Tiny plugin; mainly convenience. Already covered above under Claude skills.
 
 ### Claude video skills, style packs and prompt collections
 
@@ -335,6 +487,82 @@ Use when: an agent-built UI or graphic looks "off." Complements Impeccable (Impe
 **Motion Design Skill** — github.com/LottieFiles/motion-design-skill · MIT · 3.4k★ · `npx skills add lottiefiles/motion-design-skill` · agent-ready
 Best at: universal motion design principles for AI agents — timing, easing, choreography, Disney animation principles adapted for UI.
 Use when: any code-animated work. Teaches 12 principles of animation, anticipation, follow-through, squash/stretch, etc. Foundational.
+
+**UI UX Pro Max** — github.com/nextlevelbuilder/ui-ux-pro-max-skill · MIT · 2.8k★ · `npx skills add nextlevelbuilder/ui-ux-pro-max-skill` · agent-ready
+Best at: generating a full design system (pattern, palette, typography) from a brief before you animate.
+Use when: you need a consistent visual language established before motion work begins. Sets up the design foundation.
+
+**/anatomy** — skills.wheresryan.sh/anatomy · skill site (not GitHub)
+Best at: drawing machines and systems as isometric figures.
+Use when: technical explainers need isometric cutaways. Not a GitHub repo — skill accessed via URL.
+
+**/anatomy-reveal** — typingmind.com/skills/annnguyentt-anatomy-reveal · skill site (not GitHub)
+Best at: exploded product views plus a reveal MP4.
+Use when: product showcases need dramatic reveals. Not a GitHub repo — skill accessed via URL.
+
+**/hairline** — hairline.lucasmarkes.com/skills · skill site (not GitHub)
+Best at: interactive line-figure animations from an idea or an SVG.
+Use when: minimalist line animations or wireframe explainers. Not a GitHub repo — skill accessed via URL.
+
+**anidoodle** — github.com/alexgreensh/anidoodle · MIT · 1.2k★ · clone repo
+Best at: doodle-style animations and loops, all in code.
+Use when: casual, hand-drawn animation style without actual drawing.
+
+**awesome-claude-5-5-videos** — github.com/athemeroy/awesome-claude-5-5-videos · CC BY 4.0 · 1k★
+Best at: archive of Claude-made animations with original sources, tools and workflows.
+Use when: researching what's possible, finding workflow evidence, or studying proven approaches. Similar to awesome-opus5-5-videos.
+
+**blender-skills** — github.com/EL4CTEO/blender-skills · MIT · 890★ · `npx skills add el4cteo/blender-skills` · agent-ready
+Best at: 28 pro Blender techniques packaged as agent skills — a Claude Code plugin for Blender workflows.
+Use when: Blender work beyond basic MCP commands. Complements Blender MCP with higher-level techniques.
+
+**cinetic** — github.com/Leonxlnx/cinetic · MIT · 1.5k★ · clone repo
+Best at: launch films straight from code.
+Use when: product launch videos, promo films. Similar to huashu-motion and video-shotcraft.
+
+**diagram-design** — github.com/cathrynlavery/diagram-design · MIT · 1.9k★ · `npx skills add cathrynlavery/diagram-design` · agent-ready
+Best at: on-brand diagrams as one HTML+SVG file (animatable).
+Use when: technical diagrams, flowcharts, system architecture visuals that need to match brand guidelines.
+
+**FFmpeg Skill** — github.com/kajisho5/ffmpeg-skill · MIT · 1.3k★ · `npx skills add kajisho5/ffmpeg-skill` · agent-ready
+Best at: 42 local editing tools for agents — cuts, captions, audio cleanup, reframing, overlays, exports.
+Use when: agent-driven ffmpeg workflows. Packages common ffmpeg operations as agent-friendly skills.
+
+**Graphed UGC Studio** — github.com/graphed-inc/marketing-skills/tree/main/skills/ugc-studio · MIT · 980★ · skill in repo
+Best at: open-source HeyGen alternative — talking-head videos in bulk with motion graphics added.
+Use when: UGC-style videos at scale without paid services.
+
+**Herk Edit Kit** — github.com/nateherkai/herk-edit-kit · MIT · 1.1k★ · `npx skills add nateherkai/herk-edit-kit` · agent-ready
+Best at: Nate Herk's Claude Code/Codex editing kit — dead-air cuts, transcript edits, captions and HyperFrames motion graphics.
+Use when: editorial workflows combining cuts, transcripts and motion graphics.
+
+**huashu-art-motion** — github.com/alchaincyf/huashu-art-motion · MIT · 1.8k★ · `npx skills add alchaincyf/huashu-art-motion` · agent-ready
+Best at: turns paintings into moving art in 35 art styles.
+Use when: animating static art, museum piece presentations, or art-history content.
+
+**Motion AI Kit** — github.com/motiondivision/ai-kit · no explicit license · 134★ · clone repo
+Best at: Motion's official agent kit — CSS springs, motion best practices and motion audits.
+Use when: using Framer Motion in agent work. Small Cursor plugin for Motion library.
+
+**Motion Video Kit** — github.com/echris6/motion-video-kit · MIT · 2.3k★ · `npx skills add echris6/motion-video-kit` · agent-ready
+Best at: Claude Code workflows for launch videos, animated product demos and motion graphics, with sound design and visual review.
+Use when: end-to-end video production workflows from brief to finished film.
+
+**motionmaxxing** — github.com/Tejashmakwana/motionmaxxing · MIT · 980★ · `npx skills add tejashmakwana/motionmaxxing` · agent-ready
+Best at: turns AI-slop motion into designer-level motion.
+Use when: polishing agent-generated animations. Complements Unslop and Impeccable for motion work.
+
+**REA (Reverse Engineer Anything)** — github.com/morluto/rea · Apache-2.0 · 2.1k★ · clone repo
+Best at: the 'reverse anything' repo that Rea-Video and HyperFrames' reverse-any-video build on.
+Use when: understanding the foundation of reverse-engineering tools. Framework/library rather than a ready skill.
+
+**reanimate** — github.com/NiazMorshed2007/reanimate · MIT · 1.4k★ · `npx skills add niazmorshed2007/reanimate` · agent-ready
+Best at: rebuilds any animation you see, frame by frame.
+Use when: copying reference animations precisely. Similar to Rea-Video but focused on animation recreation.
+
+**Scenario Skills + MCP** — github.com/scenario-labs/skills · MIT · 1.8k★ · `npx skills add scenario-labs/skills` · agent-ready
+Best at: Scenario's agent skills including scenario-motion-loops, kinetic film and caption studio — powers the 80 Motion Loops collection.
+Use when: working with Scenario's AI image/video generation in agent workflows. Includes MCP server.
 
 **video-shotcraft** — github.com/Vincentwei1021/video-shotcraft · Apache-2.0 · 17k★ · `npx skills add Vincentwei1021/video-shotcraft` · agent-ready
 Best at: product promo films from your real pages/screenshots in Remotion: 124 shot recipe cards / 150 shots, storyboard, beat-synced cut, sound design, per-frame checks; editable in its Motion Workbench; JianYing export. Sibling `video-talkcraft` locks motion to a narration.
@@ -470,6 +698,18 @@ Use when: cleaning noisy recordings before transcription or voiceover use. Alter
 Best at: automatically creating 2D mouth animation from voice recordings — outputs phoneme timings for cartoon characters.
 Use when: syncing a cartoon character's mouth to dialogue. Works with Spine, Moho, Adobe Animate, etc.
 
+**Bark** — github.com/suno-ai/bark · MIT · 42.7k★ · `pip install bark`
+Best at: generates voices and sound effects from text — multilingual, non-verbal sounds (laughs, sighs, music).
+Use when: expressive narration with emotion or when you need sound effects generated from descriptions. CPU-friendly but slow.
+
+**Pedalboard** — github.com/spotify/pedalboard · GPL-3.0 · 6.1k★ · `pip install pedalboard`
+Best at: reverb, compression and audio effects — Spotify's audio processing library for Python.
+Use when: programmatic audio processing, music production effects, or cleaning/mastering audio in code.
+
+**Stable-ts** — github.com/jianfch/stable-ts · MIT · 2.4k★ · `pip install stable-ts`
+Best at: Whisper subtitles with word-level timestamps (SRT/VTT/ASS) — improved timestamp stability.
+Use when: Whisper timestamps aren't stable enough. Alternative to WhisperX for word-level timing.
+
 ### 3D and scene tools
 
 **Blender** — github.com/blender/blender · GPL · 22k★ · desktop app with Python API
@@ -495,10 +735,6 @@ Use when: 3D inside a HyperFrames/Remotion/Canvas composition (`@remotion/three`
 **Anime.js** — github.com/juliangarnier/anime · MIT · 74k★ · npm
 Best at: lightweight CSS/SVG/DOM animation with timelines, stagger, SVG morph/draw.
 Use when: a smaller alternative to GSAP. In HyperFrames, stay with GSAP.
-
-**mo.js** — github.com/mojs/mojs · MIT · 19k★ · npm
-Best at: bursts, shape swirls and eased "pop" effects for UI flourishes.
-Use when: celebration bursts, click/impact accents in a motion graphic.
 
 **Motion (Framer Motion)** — github.com/motiondivision/motion · MIT · 35k★ · npm
 Best at: declarative React/JS animation with springs, layout animations, gestures.
@@ -548,14 +784,75 @@ Use when: thick lines, glowing lines, or textured lines in Three.js. Standard Li
 Best at: granular, multi-language shader library (GLSL, HLSL, Metal, WGSL, WEGL, CUDA) for performance and flexibility.
 Use when: writing custom shaders and want reusable functions (noise, colors, lighting, etc.). Like a standard library for shaders.
 
+**Babylon.js** — github.com/BabylonJS/Babylon.js · Apache-2.0 · 25.8k★ · npm
+Best at: real-time 3D rendering engine — powerful alternative to Three.js with built-in physics, PBR, and XR support.
+Use when: complex 3D scenes, games, or when Three.js doesn't fit. Steeper learning curve but more complete out of the box.
+
+**cables.gl** — github.com/cables-gl/cables_electron · MIT · 1.2k★ · desktop app
+Best at: node-based visual scene building — patch together nodes for generative visuals and 3D without code.
+Use when: visual artists want to build 3D/generative work without writing code. Not agent-driven.
+
+**Drei** — github.com/pmndrs/drei · MIT · 10.3k★ · npm
+Best at: ready-made React Three Fiber helpers — cameras, controls, loaders, effects, abstractions.
+Use when: using React Three Fiber and want pre-built components. Saves boilerplate.
+
+**Spark** — github.com/sparkjsdev/spark · MIT · 890★ · npm
+Best at: Gaussian splat rendering for Three.js — real-time 3D Gaussian Splatting viewer.
+Use when: displaying 3DGS captures in the browser. Cutting-edge technique for photorealistic 3D.
+
+**SPlisHSPlasH** — github.com/InteractiveComputerGraphics/SPlisHSPlasH · MIT · 2.3k★ · C++ library
+Best at: fluid, foam and splash simulation — research-grade SPH fluid simulator.
+Use when: physically accurate fluid simulations for research or high-end VFX. Requires C++ build.
+
+**THREE-CustomShaderMaterial** — github.com/FarazzShaikh/THREE-CustomShaderMaterial · MIT · 1.6k★ · npm
+Best at: custom shaders that keep Three.js lighting — extend Three.js materials without losing built-in features.
+Use when: custom shaders need to work with Three.js lighting system. Bridges custom and standard materials.
+
+**cannon-es** — github.com/pmndrs/cannon-es · MIT · 2.1k★ · npm
+Best at: 3D physics and collisions — JavaScript physics engine for Three.js.
+Use when: simpler physics than Rapier. Good for basic rigid-body physics.
+
+**Effekseer** — github.com/effekseer/Effekseer · MIT · 1.9k★ · standalone + Three.js plugin
+Best at: stylized particle effects — game-style VFX editor with Three.js runtime.
+Use when: game-like explosions, magic effects, or stylized particles. Visual editor exports to code.
+
+**img2threejs** — github.com/img2threejs/img2threejs · MIT · 1.2k★ · `npx skills add img2threejs/img2threejs` · agent-ready
+Best at: rebuilds the object in a reference image as animation-ready Three.js code.
+Use when: turning product photos or illustrations into 3D code. Experimental but useful for quick 3D from 2D.
+
+**Jolt Physics** — github.com/jrouwe/JoltPhysics · MIT · 7.8k★ · C++ library with JS bindings
+Best at: rigid and soft body physics and collisions — high-performance physics engine.
+Use when: demanding physics simulations. More performant than Cannon but heavier integration.
+
+**PlayCanvas** — github.com/playcanvas/engine · MIT · 10.1k★ · npm
+Best at: real-time 3D worlds engine — game engine for the web with visual editor.
+Use when: building 3D web games or interactive worlds. Alternative to Babylon.js.
+
+**postprocessing (pmndrs)** — github.com/pmndrs/postprocessing · Zlib · 3.9k★ · npm
+Best at: bloom, depth of field and grading for Three.js — vanilla Three.js postprocessing (non-React).
+Use when: Three.js without React. For React Three Fiber use react-postprocessing instead.
+
+**Sverchok** — github.com/nortikin/sverchok · GPL-3.0 · 3.1k★ · Blender addon
+Best at: procedural geometry nodes for Blender — parametric modeling with node graphs.
+Use when: algorithmic/generative 3D modeling in Blender. Requires Blender.
+
+**Tesseract (Mirage)** — github.com/mirage-hq/Tesseract · MIT · 1.1k★ · agent skills + local engine
+Best at: agent skills + local engine for editing, motion graphics and path-traced 3D scenes.
+Use when: local 3D rendering with agent workflows. Young project; watch for development.
+
+**three-gpu-pathtracer** — github.com/gkjohnson/three-gpu-pathtracer · MIT · 1.9k★ · npm
+Best at: realistic path-traced lighting and reflections for Three.js — GPU-accelerated path tracing.
+Use when: photorealistic rendering in Three.js. Slow but beautiful. Requires WebGL 2.
+
 ## Licensing quick flags
 
 - **Non-commercial only**: video-editor-skills (CC BY-NC), story-studio (CC BY-NC-SA).
-- **No license or unclear license (verify before commercial use)**: PDoomVideo, opus-video-prompts, Typed.js, Isotope, Zdog, SVG.js, ai-kit, Rhubarb Lip Sync, DeepFilterNet, LYGIA.
-- **Attribution required**: Unslop (CC BY 4.0).
+- **No license or unclear license (verify before commercial use)**: PDoomVideo, opus-video-prompts, Typed.js, Isotope, Zdog, SVG.js, ai-kit, Rhubarb Lip Sync, DeepFilterNet, LYGIA, Motion AI Kit.
+- **Attribution required**: Unslop (CC BY 4.0), awesome-claude-5-5-videos (CC BY 4.0), awesome-ai-motion (CC BY 4.0).
 - **Company license may be needed**: Remotion.
-- **Copyleft (fine to use as a tool, careful if bundling code)**: FFmpeg (GPL builds), LosslessCut, color-matcher, ComfyUI, Blender, FreeMoCap (AGPL), Hydra (AGPL), Kdenlive (GPL), OpenToonz, Synfig (GPL), EffectCraft (copyleft if bundling), Scenario Blender Plugin (GPL), Piper (GPL), Audacity (GPL).
-- **Paid API/credits**: Higgsfield Skills, ElevenLabs Skills.
+- **Copyleft (fine to use as a tool, careful if bundling code)**: FFmpeg (GPL builds), LosslessCut, color-matcher, ComfyUI, Blender, FreeMoCap (AGPL), Hydra (AGPL), Kdenlive (GPL), OpenToonz, Synfig (GPL), EffectCraft (copyleft if bundling), Scenario Blender Plugin (GPL), Piper (GPL), Audacity (GPL), Shotcut (GPL), OpenCut (GPL), Storyboarder (GPL), Pedalboard (GPL), Sverchok (GPL).
+- **MPL-2.0 (weak copyleft)**: Penpot.
+- **Paid API/credits**: Higgsfield Skills, ElevenLabs Skills, SpaceCut AI (app), Picsart (app).
 
 ## Output
 
